@@ -1,6 +1,7 @@
 ﻿namespace KnapsackProblem.Solvers
 {
-    public class GeneticSolver<T> : ISolver
+    [Obsolete]
+    public class GeneticSolver : ISolver
     {
         public const int ITERATIONS = 500;
         public const int POPULATION = 100;
@@ -19,7 +20,7 @@
 
         }
 
-        protected void CreateInitialPopulation(int n, int variablesAmount, int minVal, int maxVal)
+        protected virtual void CreateInitialPopulation(int n, int variablesAmount, int[] values)
         {
             populationFitnessScores = new int[n];
             populationEncoded = new int[n, variablesAmount];
@@ -29,13 +30,12 @@
                 for (int j = 0; j < variablesAmount; j++)
                 {
                     // this has to be determined by the dataset
-                    var randVal = new Random().Next(minVal, maxVal + 1);
-                    populationEncoded[j, i] = randVal;
+                    
                 }
             }
         }
 
-        protected void CalculateFitnessScore(Func<int> scoreFunction, int variablesAmount)
+        protected virtual void CalculateFitnessScore(Func<int> scoreFunction, int variablesAmount)
         {
 
         }
@@ -91,7 +91,7 @@
 
         public void FindOptimalSolution()
         {
-            CreateInitialPopulation(POPULATION);
+            //CreateInitialPopulation(POPULATION);
 
             var currentIteration = 0;
 
@@ -104,7 +104,7 @@
                     var mutatorRng = new Random().NextDouble();
 
 
-                    var k = 1;
+                    //var k = 1;
                 }
 
                 //CrossoverParents(CROSSOVER_TYPE_SELECTED, )
