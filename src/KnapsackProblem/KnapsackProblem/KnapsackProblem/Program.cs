@@ -12,7 +12,7 @@ public class Program
 
         // setup problem
         var knapsackGeneticSolver = new KnapsackGeneticSolver(5.0);
-
+        knapsackGeneticSolver.FindOptimalSolution();
         
         // explain the issue
 

@@ -5,12 +5,7 @@
         public const int POSSIBLE_ITEMS_COUNT = 15;
 
         private Knapsack _knapsack;
-        private Item[] _possibleItems;
-
-        public void SetupProblem()
-        {
-            _possibleItems =
-            [
+        private readonly Item[] _possibleItems = [
                 new Item() { Value = 1500, WeightInKg = 1.5 }, // laptop
                 new Item() { Value = 50, WeightInKg = 0.3 }, // mug
                 new Item() { Value = 100, WeightInKg = 0.1 }, // sunglasses
@@ -27,28 +22,6 @@
                 new Item() { Value = 500, WeightInKg = 1.5 }, // vase
                 new Item() { Value = 500, WeightInKg = 10 }, // dirt bag
             ];
-
-            //var item1 = new Item() { Value = 1500, WeightInKg = 1.5 }; // laptop
-            //var item2 = new Item() { Value = 50, WeightInKg = 0.3 }; // mug
-            //var item3 = new Item() { Value = 100, WeightInKg = 0.1 }; // sunglasses
-            //var item4 = new Item() { Value = 50, WeightInKg = 0.2 }; // mousepad
-            //var item5 = new Item() { Value = 200, WeightInKg = 0.4 }; // drawing tablet
-            //var item6 = new Item() { Value = 150, WeightInKg = 0.2 }; // mouse
-            //var item7 = new Item() { Value = 200, WeightInKg = 0.6 }; // speaker
-            //var item8 = new Item() { Value = 1500, WeightInKg = 2 }; // console
-            //var item9 = new Item() { Value = 50, WeightInKg = 0.4 }; // notepad
-            //var item10 = new Item() { Value = 100, WeightInKg = 0.1 }; // keys
-            //var item11 = new Item() { Value = 20, WeightInKg = 0.5 }; // bread
-            //var item12 = new Item() { Value = 700, WeightInKg = 0.3 }; // earbuds
-            //var item13 = new Item() { Value = 100, WeightInKg = 0.2 }; // pills 
-            //var item14 = new Item() { Value = 500, WeightInKg = 1.5 }; // vase
-            //var item15 = new Item() { Value = 500, WeightInKg = 10 }; // dirt bag
-            //var item16 = new Item() { Value = 1, WeightInKg = 1 };
-            //var item17 = new Item() { Value = 1, WeightInKg = 1 };
-            //var item18 = new Item() { Value = 1, WeightInKg = 1 };
-            //var item19 = new Item() { Value = 1, WeightInKg = 1 };
-            //var item20 = new Item() { Value = 1, WeightInKg = 1 };
-        }
 
         // this will return a useless item when index is out of bounds
         public Item GetItemFromPossibleItems(int index)
@@ -84,7 +57,6 @@
         public KnapsackProblem(double maxWeightInKgs)
         {
             _knapsack = new Knapsack(maxWeightInKgs);
-            _possibleItems = new Item[POSSIBLE_ITEMS_COUNT];
         }
 
         public struct Item
