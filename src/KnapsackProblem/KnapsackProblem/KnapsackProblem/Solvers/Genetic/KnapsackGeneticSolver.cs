@@ -1,4 +1,7 @@
-﻿namespace KnapsackProblem.Solvers
+﻿using ProblemSolvers.CommonTypes.GAEnums;
+using ProblemSolvers.Problems;
+
+namespace ProblemSolvers.Solvers.Genetic
 {
     public class KnapsackGeneticSolver : ISolver
     {
@@ -8,11 +11,12 @@
         //public const int ITERATIONS = 10;
         public const int POPULATION_SIZE = 500;
         public const int N_POINTS_CROSSOVER = 4;
-        public const double MINIMUM_CROSSOVER_PROBABILITY = 0.1;
+        public const double CROSSOVER_PROBABILITY = 0.4;
         public const double MUTATION_PROBABILITY = 0.001; // 0 <= MUTATION_PROBABILITY <= 1 
 
         public const CrossoverType CROSSOVER_TYPE_SELECTED = CrossoverType.OnePoint;
         public const MutationType MUTATION_TYPE_SELECTED = MutationType.SingleBitInversion;
+        public const SelectionType SELECTION_TYPE_SELECTED = SelectionType.Roulette;
 
 
         private int[] _populationFitnessScores;
@@ -84,76 +88,98 @@
             // the best fitness has the biggest probability of being selected
             for (int i = 0; i < POPULATION_SIZE; i++)
             {
-                _populationSelectionProbability[i] = (double)_populationFitnessScores[i] / (double)_sumOfFitness;
+                _populationSelectionProbability[i] = _populationFitnessScores[i] / (double)_sumOfFitness;
             }
         }
 
         // not ok
-        private void ProportionalSelectionForNextGen()
+        private int SelectParentIndexForNextPopulation(SelectionType selectionType)
         {
-            //for (int i = 0; i < POPULATION; i++)
-            //{
-            //    var probabilityModifier = new Random().NextDouble();
+            switch (selectionType)
+            {
+                case SelectionType.Roulette:
+                    return SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
+                default:
+                    throw new NotImplementedException($"Selection type {selectionType} not implemented.");
 
-            //    int k = 0;
-            //    var currentProbability = _populationSelectionProbability[0];
-
-            //    while (k < POPULATION - 1 && probabilityModifier < currentProbability)
-            //    {
-            //        k++;
-            //        currentProbability = 0;
-            //        for(int j = 0; j < k; j++)
-            //        {
-            //            currentProbability += _populationFitnessScores[j];
-            //        }
-            //        currentProbability = currentProbability / _sumOfFitness;
-            //    }
-
-            //    _populationEncodedNextGen[i] = _populationEncoded[k];
-            //}
-
-
+            }
         }
 
-        private void DoCrossovers(CrossoverType crossoverType)
+        private int SelectParentIndexByRoulette(int[] populationFitnessScores, long fitnessSum)
         {
-            switch (crossoverType) { 
-                case (CrossoverType.OnePoint):
-                    OnePointCrossover();
-                    break;
+            var randomVal = new Random().NextInt64(0, fitnessSum);
+            long currentFitnessSum = 0;
+
+            int i = 0;
+
+            for (i = 0; i < populationFitnessScores.Length; i++)
+            {
+                currentFitnessSum += populationFitnessScores[i];
+                if (currentFitnessSum > randomVal)
+                {
+                    return i;
+                }
+            }
+
+            return i;
+        }
+
+
+        private int[] CrossoverTwoParents(int p1Index, int p2Index, CrossoverType crossoverType)
+        {
+            switch (crossoverType)
+            {
+                case CrossoverType.OnePoint:
+                    return OnePointCrossover(_populationEncoded[p1Index], _populationEncoded[p2Index]);
                 default:
                     throw new NotImplementedException($"Crossover type {crossoverType} is not implemented.");
             }
         }
 
-        private void OnePointCrossover()
+        private int[] OnePointCrossover(int[] parent1, int[] parent2)
         {
             var rng = new Random();
-            for (int i = 0; i < POPULATION_SIZE - 1; i++)
+
+            if (parent1.Length != parent2.Length)
             {
-                if (rng.NextDouble() <= MINIMUM_CROSSOVER_PROBABILITY)
-                {
-                    // the point in which the "chromosome" is cut
-                    var pos = rng.Next(0, KnapsackProblem.POSSIBLE_ITEMS_COUNT);
-                    var aux = new int[KnapsackProblem.POSSIBLE_ITEMS_COUNT];
-                    for (int j = 0; j < pos; j++)
-                    {
-                        aux[j] = _populationEncodedNextGen[i][j];
-                    }
-
-                    for (int j = pos; j < KnapsackProblem.POSSIBLE_ITEMS_COUNT; j++)
-                    {
-                        aux[j] = _populationEncodedNextGen[i + 1][j];
-                    }
-
-                    _populationEncodedNextGen[i] = aux;
-                    Console.WriteLine($"Crossover done for chromosomes {i} and {i + 1} at position {pos}.");
-                    Console.WriteLine($"Previous population chromosome -> {string.Join("", _populationEncoded[i])}");
-                    Console.WriteLine($"Next population chromosome -> {string.Join("", _populationEncodedNextGen[i])}");
-                    continue;
-                }
-                _populationEncodedNextGen[i] = _populationEncoded[i];
+                throw new InvalidDataException("Parents have incompatible chromosomes.");
             }
+
+            // the point in which the "chromosome" is cut
+            var pos = rng.Next(0, parent1.Length);
+            var child = new int[parent1.Length];
+            for (int j = 0; j < pos; j++)
+            {
+                child[j] = parent1[j];
+            }
+
+            for (int j = pos; j < parent1.Length; j++)
+            {
+                child[j] = parent2[j];
+            }
+
+            return child;
+        }
+
+        private int[] MutateIndividual(int[] individual, MutationType mutationType)
+        {
+            switch (mutationType)
+            {
+                case (MutationType.SingleBitInversion):
+                    return SingleBitInversionMutation(individual);
+                default:
+                    throw new NotImplementedException($"Mutation {mutationType} not implemented.");
+            }
+        }
+
+
+        // viable for 01 representations
+        private int[] SingleBitInversionMutation(int[] individual)
+        {
+            var randomIndex = new Random().Next(0, individual.Length);
+            individual[randomIndex] = individual[randomIndex] == 0 ? 1 : 0;
+
+            return individual;
         }
 
         private void SetNewPopulationAsCurrent()
@@ -177,6 +203,8 @@
             int i = 0;
             // do
 
+            var rng = new Random();
+
             while (i < ITERATIONS)
             {
                 Console.WriteLine($"Generation {i}");
@@ -186,8 +214,43 @@
                 SetFitnessForPopulation();
                 CalculateSelectionProbabilityForCurrentPopulation();
 
-                // proportional Selection
-                ProportionalSelectionForNextGen();
+                // index keeping the currently selected 'individual' from the next population
+                int nextPopulationIndex = 0;
+                while (nextPopulationIndex < POPULATION_SIZE)
+                {
+                    // proportional Selection
+                    var parent1Index = SelectParentIndexForNextPopulation(SELECTION_TYPE_SELECTED);
+                    var parent2Index = parent1Index;
+
+                    // crossover or basic replication
+                    if (rng.NextDouble() < CROSSOVER_PROBABILITY)
+                    {
+                        parent2Index = SelectParentIndexForNextPopulation(SELECTION_TYPE_SELECTED);
+
+                        var crossoveredIndividual = CrossoverTwoParents(parent1Index, parent2Index, CROSSOVER_TYPE_SELECTED);
+
+                        for (int j = 0; j < _populationEncodedNextGen[i].Length; j++)
+                        {
+                            _populationEncodedNextGen[i][j] = crossoveredIndividual[j];
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < _populationEncodedNextGen[i].Length; j++)
+                        {
+                            _populationEncodedNextGen[i][j] = _populationEncoded[parent1Index][j];
+                        }
+                    }
+
+                    // mutate
+                    if (rng.NextDouble() < MUTATION_PROBABILITY)
+                    {
+                        MutateIndividual(_populationEncodedNextGen[i], MUTATION_TYPE_SELECTED);
+                    }
+
+                    nextPopulationIndex++;
+                }
+
 
                 // select best fit for the new population
                 // crossover / create new population
@@ -204,22 +267,6 @@
 
 
             // also find best, and average 
-        }
-
-        public enum CrossoverType
-        {
-            OnePoint,
-            NPoint,
-            Segmented,
-            Uniform,
-            Shuffle
-        }
-
-        public enum MutationType
-        {
-            SingleBitInversion,
-            BitWiseInversion,
-            RandomSelection
         }
     }
 }

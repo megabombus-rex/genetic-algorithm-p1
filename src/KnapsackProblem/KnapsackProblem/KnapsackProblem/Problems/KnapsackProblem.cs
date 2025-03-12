@@ -1,4 +1,4 @@
-﻿namespace KnapsackProblem
+﻿namespace ProblemSolvers.Problems
 {
     public class KnapsackProblem
     {

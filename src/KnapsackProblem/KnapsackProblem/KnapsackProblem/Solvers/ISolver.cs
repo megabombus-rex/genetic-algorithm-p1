@@ -1,4 +1,4 @@
-﻿namespace KnapsackProblem.Solvers
+﻿namespace ProblemSolvers.Solvers
 {
     public interface ISolver
     {
