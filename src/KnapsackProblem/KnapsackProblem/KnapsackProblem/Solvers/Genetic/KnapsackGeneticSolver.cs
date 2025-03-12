@@ -8,7 +8,6 @@ namespace ProblemSolvers.Solvers.Genetic
         private KnapsackProblem _knapsackProblem;
 
         public const int ITERATIONS = 500;
-        //public const int ITERATIONS = 10;
         public const int POPULATION_SIZE = 500;
         public const int N_POINTS_CROSSOVER = 4;
         public const double CROSSOVER_PROBABILITY = 0.4;
@@ -20,7 +19,6 @@ namespace ProblemSolvers.Solvers.Genetic
 
 
         private int[] _populationFitnessScores;
-        private double[] _populationSelectionProbability;
         private int[][] _populationEncoded; // |0|0|1|1|1|1|0| etc.
         private int[][] _populationEncodedNextGen; // |0|0|1|1|1|1|0| etc.
         private long _sumOfFitness;
@@ -29,7 +27,6 @@ namespace ProblemSolvers.Solvers.Genetic
         {
             _knapsackProblem = new KnapsackProblem(maxKgs);
             _populationFitnessScores = new int[POPULATION_SIZE];
-            _populationSelectionProbability = new double[POPULATION_SIZE];
             _populationEncoded = new int[POPULATION_SIZE][];
             _populationEncodedNextGen = new int[POPULATION_SIZE][];
             _sumOfFitness = 0;
@@ -82,13 +79,6 @@ namespace ProblemSolvers.Solvers.Genetic
             for (int i = 0; i < POPULATION_SIZE; i++)
             {
                 _sumOfFitness += _populationFitnessScores[i];
-            }
-
-
-            // the best fitness has the biggest probability of being selected
-            for (int i = 0; i < POPULATION_SIZE; i++)
-            {
-                _populationSelectionProbability[i] = _populationFitnessScores[i] / (double)_sumOfFitness;
             }
         }
 
