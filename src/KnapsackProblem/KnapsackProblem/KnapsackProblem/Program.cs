@@ -11,7 +11,7 @@ public class Program
         // Genetic algorithm
 
         // setup problem
-        var knapsackGeneticSolver = new KnapsackGeneticSolver(5.0);
+        var knapsackGeneticSolver = new KnapsackGeneticSolver(7.5);
         knapsackGeneticSolver.FindOptimalSolution();
         
         // explain the issue

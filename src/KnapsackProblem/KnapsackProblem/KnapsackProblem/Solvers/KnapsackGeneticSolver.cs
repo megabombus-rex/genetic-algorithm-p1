@@ -5,7 +5,8 @@
         private KnapsackProblem _knapsackProblem;
 
         public const int ITERATIONS = 500;
-        public const int POPULATION = 100;
+        //public const int ITERATIONS = 10;
+        public const int POPULATION_SIZE = 500;
         public const int N_POINTS_CROSSOVER = 4;
         public const double MINIMUM_CROSSOVER_PROBABILITY = 0.1;
         public const double MUTATION_PROBABILITY = 0.001; // 0 <= MUTATION_PROBABILITY <= 1 
@@ -23,10 +24,10 @@
         public KnapsackGeneticSolver(double maxKgs)
         {
             _knapsackProblem = new KnapsackProblem(maxKgs);
-            _populationFitnessScores = new int[POPULATION];
-            _populationSelectionProbability = new double[POPULATION];
-            _populationEncoded = new int[POPULATION][];
-            _populationEncodedNextGen = new int[POPULATION][];
+            _populationFitnessScores = new int[POPULATION_SIZE];
+            _populationSelectionProbability = new double[POPULATION_SIZE];
+            _populationEncoded = new int[POPULATION_SIZE][];
+            _populationEncodedNextGen = new int[POPULATION_SIZE][];
             _sumOfFitness = 0;
         }
 
@@ -51,7 +52,7 @@
             var rng = new Random();
 
 
-            for (int i = 0; i < POPULATION; i++)
+            for (int i = 0; i < POPULATION_SIZE; i++)
             {
                 _populationEncoded[i] = new int[KnapsackProblem.POSSIBLE_ITEMS_COUNT];
                 _populationEncodedNextGen[i] = new int[KnapsackProblem.POSSIBLE_ITEMS_COUNT];
@@ -64,7 +65,7 @@
 
         private void SetFitnessForPopulation()
         {
-            for (int i = 0; i < POPULATION; i++)
+            for (int i = 0; i < POPULATION_SIZE; i++)
             {
                 _knapsackProblem.SetupKnapsack(TranslateEncodedItemsToItemList(_populationEncoded[i]));
                 _populationFitnessScores[i] = _knapsackProblem.EvaluateFitnessForKnapsack();
@@ -74,41 +75,44 @@
         private void CalculateSelectionProbabilityForCurrentPopulation()
         {
             // sum all of the fitness scores
-            for (int i = 0; i < POPULATION; i++)
+            for (int i = 0; i < POPULATION_SIZE; i++)
             {
                 _sumOfFitness += _populationFitnessScores[i];
             }
 
 
             // the best fitness has the biggest probability of being selected
-            for (int i = 0; i < POPULATION; i++)
+            for (int i = 0; i < POPULATION_SIZE; i++)
             {
-                _populationSelectionProbability[i] = (int)((long)_populationFitnessScores[i] / _sumOfFitness);
+                _populationSelectionProbability[i] = (double)_populationFitnessScores[i] / (double)_sumOfFitness;
             }
         }
 
+        // not ok
         private void ProportionalSelectionForNextGen()
         {
-            for (int i = 0; i < POPULATION; i++)
-            {
-                var probabilityModifier = new Random().NextDouble();
+            //for (int i = 0; i < POPULATION; i++)
+            //{
+            //    var probabilityModifier = new Random().NextDouble();
 
-                int k = 0;
-                var currentProbability = _populationSelectionProbability[0];
+            //    int k = 0;
+            //    var currentProbability = _populationSelectionProbability[0];
 
-                while (k < POPULATION && probabilityModifier < currentProbability)
-                {
-                    k++;
-                    currentProbability = 0;
-                    for(int j = 0; j <= k; j++)
-                    {
-                        currentProbability += _populationFitnessScores[j];
-                    }
-                    currentProbability = currentProbability / _sumOfFitness;
-                }
+            //    while (k < POPULATION - 1 && probabilityModifier < currentProbability)
+            //    {
+            //        k++;
+            //        currentProbability = 0;
+            //        for(int j = 0; j < k; j++)
+            //        {
+            //            currentProbability += _populationFitnessScores[j];
+            //        }
+            //        currentProbability = currentProbability / _sumOfFitness;
+            //    }
 
-                _populationEncodedNextGen[i] = _populationEncoded[k];
-            }
+            //    _populationEncodedNextGen[i] = _populationEncoded[k];
+            //}
+
+
         }
 
         private void DoCrossovers(CrossoverType crossoverType)
@@ -125,7 +129,7 @@
         private void OnePointCrossover()
         {
             var rng = new Random();
-            for (int i = 0; i < POPULATION - 1; i++)
+            for (int i = 0; i < POPULATION_SIZE - 1; i++)
             {
                 if (rng.NextDouble() <= MINIMUM_CROSSOVER_PROBABILITY)
                 {
@@ -137,13 +141,26 @@
                         aux[j] = _populationEncodedNextGen[i][j];
                     }
 
-                    for(int j = pos; j < KnapsackProblem.POSSIBLE_ITEMS_COUNT; j++)
+                    for (int j = pos; j < KnapsackProblem.POSSIBLE_ITEMS_COUNT; j++)
                     {
                         aux[j] = _populationEncodedNextGen[i + 1][j];
                     }
 
                     _populationEncodedNextGen[i] = aux;
+                    Console.WriteLine($"Crossover done for chromosomes {i} and {i + 1} at position {pos}.");
+                    Console.WriteLine($"Previous population chromosome -> {string.Join("", _populationEncoded[i])}");
+                    Console.WriteLine($"Next population chromosome -> {string.Join("", _populationEncodedNextGen[i])}");
+                    continue;
                 }
+                _populationEncodedNextGen[i] = _populationEncoded[i];
+            }
+        }
+
+        private void SetNewPopulationAsCurrent()
+        {
+            for (int i = 0; i < POPULATION_SIZE - 1; i++)
+            {
+                _populationEncoded[i] = _populationEncodedNextGen[i];
             }
         }
 
@@ -171,15 +188,17 @@
 
                 // proportional Selection
                 ProportionalSelectionForNextGen();
-                DoCrossovers(CROSSOVER_TYPE_SELECTED);
 
                 // select best fit for the new population
                 // crossover / create new population
+                //DoCrossovers(CROSSOVER_TYPE_SELECTED);
 
                 // mutate (maybe)
 
                 Console.WriteLine($"Current sum of fitnesses: {_sumOfFitness}");
                 // while i < iterations
+                SetNewPopulationAsCurrent();
+
                 i++;
             }
 
