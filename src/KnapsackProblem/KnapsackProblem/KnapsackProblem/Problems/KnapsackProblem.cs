@@ -34,17 +34,17 @@
             return _possibleItems[index];
         }
 
-        public void SetupKnapsack(List<Item> items)
+        public void SetupProblem(List<Item> decodedData)
         {
             _knapsack.EmptyKnapsack();
 
-            foreach (Item item in items)
+            foreach (Item item in decodedData)
             {
                 _knapsack.AddItem(item);
             }
         }
 
-        public int EvaluateFitnessForKnapsack()
+        public int CalculateFitnessOfProblem()
         {
             if (_knapsack.IsOverweight)
             {
