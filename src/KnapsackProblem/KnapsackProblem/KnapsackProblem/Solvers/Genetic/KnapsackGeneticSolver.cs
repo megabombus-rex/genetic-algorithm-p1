@@ -23,12 +23,17 @@ namespace ProblemSolvers.Solvers.Genetic
         private int[][] _populationEncodedNextGen; // |0|0|1|1|1|1|0| etc.
         private long _sumOfFitness;
 
+        private int _currentIteration;
+        private BestKnapsackData _bestKnapsackData;
+
         public KnapsackGeneticSolver(double maxKgs)
         {
             _knapsackProblem = new KnapsackProblem(maxKgs);
             _populationFitnessScores = new int[POPULATION_SIZE];
             _populationEncoded = new int[POPULATION_SIZE][];
             _populationEncodedNextGen = new int[POPULATION_SIZE][];
+            _bestKnapsackData = new BestKnapsackData(KnapsackProblem.POSSIBLE_ITEMS_COUNT);
+            _currentIteration = 0;
             _sumOfFitness = 0;
         }
 
@@ -70,6 +75,14 @@ namespace ProblemSolvers.Solvers.Genetic
             {
                 _knapsackProblem.SetupKnapsack(TranslateEncodedItemsToItemList(_populationEncoded[i]));
                 _populationFitnessScores[i] = _knapsackProblem.EvaluateFitnessForKnapsack();
+            }
+
+            for (int i = 0; i < POPULATION_SIZE; i++)
+            {
+                if (_populationFitnessScores[i] > _bestKnapsackData.Fitness)
+                {
+                    _bestKnapsackData.UpdateBestKnapsack(_currentIteration, _populationFitnessScores[i], _populationEncoded[i]);
+                }
             }
         }
 
@@ -189,19 +202,19 @@ namespace ProblemSolvers.Solvers.Genetic
         {
             // populate
             CreateInitialPopulation();
+            SetFitnessForPopulation();
 
-            int i = 0;
             // do
+            _currentIteration = 0;
 
             var rng = new Random();
 
-            while (i < ITERATIONS)
+            while (_currentIteration < ITERATIONS)
             {
-                Console.WriteLine($"Generation {i}");
+                Console.WriteLine($"Generation {_currentIteration}");
 
                 // evaluate
                 _sumOfFitness = 0;
-                SetFitnessForPopulation();
                 CalculateSelectionProbabilityForCurrentPopulation();
 
                 // index keeping the currently selected 'individual' from the next population
@@ -219,23 +232,23 @@ namespace ProblemSolvers.Solvers.Genetic
 
                         var crossoveredIndividual = CrossoverTwoParents(parent1Index, parent2Index, CROSSOVER_TYPE_SELECTED);
 
-                        for (int j = 0; j < _populationEncodedNextGen[i].Length; j++)
+                        for (int j = 0; j < _populationEncodedNextGen[_currentIteration].Length; j++)
                         {
-                            _populationEncodedNextGen[i][j] = crossoveredIndividual[j];
+                            _populationEncodedNextGen[_currentIteration][j] = crossoveredIndividual[j];
                         }
                     }
                     else
                     {
-                        for (int j = 0; j < _populationEncodedNextGen[i].Length; j++)
+                        for (int j = 0; j < _populationEncodedNextGen[_currentIteration].Length; j++)
                         {
-                            _populationEncodedNextGen[i][j] = _populationEncoded[parent1Index][j];
+                            _populationEncodedNextGen[_currentIteration][j] = _populationEncoded[parent1Index][j];
                         }
                     }
 
                     // mutate
                     if (rng.NextDouble() < MUTATION_PROBABILITY)
                     {
-                        MutateIndividual(_populationEncodedNextGen[i], MUTATION_TYPE_SELECTED);
+                        MutateIndividual(_populationEncodedNextGen[_currentIteration], MUTATION_TYPE_SELECTED);
                     }
 
                     nextPopulationIndex++;
@@ -251,12 +264,35 @@ namespace ProblemSolvers.Solvers.Genetic
                 Console.WriteLine($"Current sum of fitnesses: {_sumOfFitness}");
                 // while i < iterations
                 SetNewPopulationAsCurrent();
+                SetFitnessForPopulation();
 
-                i++;
+                _currentIteration++;
             }
 
+            Console.WriteLine($"Best fitness occured in iteration {_bestKnapsackData.Iteration} for: {string.Join("", _bestKnapsackData.Genome)} with fitness score: {_bestKnapsackData.Fitness}.");
 
             // also find best, and average 
+        }
+    }
+
+    public class BestKnapsackData
+    {
+        public int Iteration;
+        public long Fitness;
+        public int[] Genome;
+
+        public BestKnapsackData(int genomeSize)
+        {
+            Iteration = 0;
+            Fitness = 0;
+            Genome = new int[genomeSize];
+        }
+
+        public void UpdateBestKnapsack(int iteration, long fitness, int[] genome)
+        {
+            Iteration = iteration;
+            Fitness = fitness;
+            Array.ConstrainedCopy(genome, 0, Genome, 0, Genome.Length);
         }
     }
 }
