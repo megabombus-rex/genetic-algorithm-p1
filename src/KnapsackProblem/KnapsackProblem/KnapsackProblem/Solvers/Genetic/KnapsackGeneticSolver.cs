@@ -10,7 +10,7 @@ namespace ProblemSolvers.Solvers.Genetic
     {
         private KnapsackProblem _knapsackProblem;
 
-        public const int ITERATIONS = 500;
+        public const int ITERATIONS = 1000;
         public const int POPULATION_SIZE = 500;
         public const int N_POINTS_CROSSOVER = 4;
         public const double CROSSOVER_PROBABILITY = 0.7;
@@ -85,6 +85,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 if (_populationFitnessScores[i] > _bestKnapsackData.Fitness)
                 {
                     _bestKnapsackData.UpdateBestKnapsack(_currentIteration, _populationFitnessScores[i], _populationEncoded[i]);
+                    Console.WriteLine($"New best knapsack found. Iteration {_currentIteration}. Fitness = {_populationFitnessScores[i]}. Chromosome: {string.Join("", _populationEncoded[i])}.");
                 }
             }
         }
@@ -151,6 +152,7 @@ namespace ProblemSolvers.Solvers.Genetic
             // populate
             CreateInitialPopulation();
             SetFitnessForPopulation();
+            SumFitnessesOfPopulation();
 
             // do
             _currentIteration = 0;
@@ -163,6 +165,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
                 // evaluate
                 _sumOfFitness = 0;
+                SetFitnessForPopulation();
                 SumFitnessesOfPopulation();
 
                 // index keeping the currently selected 'individual' from the next population
@@ -180,23 +183,23 @@ namespace ProblemSolvers.Solvers.Genetic
 
                         var crossoveredIndividual = CrossoverTwoParents(parent1Index, parent2Index, CROSSOVER_TYPE_SELECTED);
 
-                        for (int j = 0; j < _populationEncodedNextGen[_currentIteration].Length; j++)
+                        for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
                         {
-                            _populationEncodedNextGen[_currentIteration][j] = crossoveredIndividual[j];
+                            _populationEncodedNextGen[nextPopulationIndex][j] = crossoveredIndividual[j];
                         }
                     }
                     else
                     {
-                        for (int j = 0; j < _populationEncodedNextGen[_currentIteration].Length; j++)
+                        for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
                         {
-                            _populationEncodedNextGen[_currentIteration][j] = _populationEncoded[parent1Index][j];
+                            _populationEncodedNextGen[nextPopulationIndex][j] = _populationEncoded[parent1Index][j];
                         }
                     }
 
                     // mutate
                     if (rng.NextDouble() < MUTATION_PROBABILITY)
                     {
-                        MutateIndividual(_populationEncodedNextGen[_currentIteration], MUTATION_TYPE_SELECTED);
+                        MutateIndividual(_populationEncodedNextGen[nextPopulationIndex], MUTATION_TYPE_SELECTED);
                     }
 
                     nextPopulationIndex++;
@@ -209,7 +212,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
                 // mutate (maybe)
 
-                Console.WriteLine($"Current sum of fitnesses: {_sumOfFitness}");
+                //Console.WriteLine($"Current sum of fitnesses: {_sumOfFitness}");
                 // while i < iterations
                 SetNewPopulationAsCurrent();
                 SetFitnessForPopulation();
