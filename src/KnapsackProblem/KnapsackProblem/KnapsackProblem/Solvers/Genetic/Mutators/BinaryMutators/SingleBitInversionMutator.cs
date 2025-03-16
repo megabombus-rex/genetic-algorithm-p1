@@ -1,9 +1,8 @@
-﻿namespace ProblemSolvers.Solvers.Genetic.Mutators
+﻿namespace ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators
 {
-    // viable for 01 representations
-    public class BinaryMutator
+    public class SingleBitInversionMutator : BinaryMutator
     {
-        public int[] SingleBitInversionMutation(int[] individual)
+        public override int[] MutateIndividual(int[] individual)
         {
             var randomIndex = new Random().Next(0, individual.Length);
             individual[randomIndex] = individual[randomIndex] == 0 ? 1 : 0;

@@ -3,6 +3,7 @@ using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Crossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators;
+using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 
 namespace ProblemSolvers.Solvers.Genetic
@@ -17,7 +18,7 @@ namespace ProblemSolvers.Solvers.Genetic
         private readonly MutationType _mutationTypeSelected = MutationType.SingleBitInversion;
 
         private readonly BinaryCrossoverer _crossoverer;
-        private readonly BinaryMutator _mutator;
+        private readonly BinaryMutator _mutator; // or a binary mutator
 
         private int[] _populationFitnessScores;
         private int[][] _populationEncoded; // |0|0|1|1|1|1|0| etc.
@@ -27,17 +28,16 @@ namespace ProblemSolvers.Solvers.Genetic
         private int _currentIteration;
         private BestKnapsackData _bestKnapsackData;
 
-        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, CrossoverType crossoverType, MutationType mutationType, GeneticAlgorithmGenericData algorithmData)
+        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, CrossoverType crossoverType, BinaryMutator mutator, GeneticAlgorithmGenericData algorithmData)
         {
             _knapsackProblem = knapsackProblem;
             _geneticAlgorithmData = algorithmData;
 
             _selectionTypeSelected = selectionType;
             _crossoverTypeSelected = crossoverType;
-            _mutationTypeSelected = mutationType;
 
             _crossoverer = new BinaryCrossoverer();
-            _mutator = new BinaryMutator();
+            _mutator = mutator;
 
             _populationFitnessScores = new int[algorithmData.PopulationSize];
             _populationEncoded = new int[algorithmData.PopulationSize][];
@@ -132,17 +132,6 @@ namespace ProblemSolvers.Solvers.Genetic
             }
         }
 
-        private int[] MutateIndividual(int[] individual, MutationType mutationType)
-        {
-            switch (mutationType)
-            {
-                case (MutationType.SingleBitInversion):
-                    return _mutator.SingleBitInversionMutation(individual);
-                default:
-                    throw new NotImplementedException($"Mutation {mutationType} not implemented.");
-            }
-        }
-
         private void SetNewPopulationAsCurrent()
         {
             for (int i = 0; i < _geneticAlgorithmData.PopulationSize - 1; i++)
@@ -208,18 +197,11 @@ namespace ProblemSolvers.Solvers.Genetic
                     // mutate
                     if (rng.NextDouble() < _geneticAlgorithmData.MutationProbability)
                     {
-                        MutateIndividual(_populationEncodedNextGen[nextPopulationIndex], _mutationTypeSelected);
+                        _mutator.MutateIndividual(_populationEncodedNextGen[nextPopulationIndex]);
                     }
 
                     nextPopulationIndex++;
                 }
-
-
-                // select best fit for the new population
-                // crossover / create new population
-                //DoCrossovers(CROSSOVER_TYPE_SELECTED);
-
-                // mutate (maybe)
 
                 //Console.WriteLine($"Current sum of fitnesses: {_sumOfFitness}");
                 // while i < iterations
