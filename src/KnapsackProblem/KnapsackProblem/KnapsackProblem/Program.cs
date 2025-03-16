@@ -65,11 +65,13 @@ public class Program
 
         var crossovererOrdered = new OrderedCrossoverer();
 
-        int[] parentOne = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        int[] parentTwo = { 5, 7, 4, 9, 1, 3, 6, 2, 8 };
+        int[] parentOne = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        int[] parentTwo = { 5, 7, 4, 9, 1, 3, 6, 12, 8, 11, 10, 2 };
 
         var child = crossovererOrdered.CrossoverParents(parentOne, parentTwo);
 
-        Console.WriteLine(string.Join("", child));
+        Console.WriteLine("Parent A: " + string.Join(",", parentOne));
+        Console.WriteLine("Parent B: " + string.Join(",", parentTwo));
+        Console.WriteLine("Child: " + string.Join(",", child));
     }
 }

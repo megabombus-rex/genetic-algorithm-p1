@@ -22,34 +22,31 @@
             var child = new int[parentOne.Length];
 
             int i = 0;
-
             Span<int> spanParentOne = parentOne.AsSpan(rIndex, rLenght);
-            Span<int> spanParentTwo = parentTwo.AsSpan();
+            var queueOfLeftParentTwo = new Queue<int>();
+
+            for (i = 0; i < parentOne.Length; i++)
+            {
+                child[i] = 0;
+                if (!spanParentOne.Contains(parentTwo[i]))
+                {
+                    queueOfLeftParentTwo.Enqueue(parentTwo[i]);
+                }
+            }
 
             // take the part from parent one
             for (i = rIndex; i < lIndex; i++)
             {
                 child[i] = parentOne[i];
             }
-
+                        
             i = 0;
-
             // fill the rest from parent without the repeating keys
-
-
             while (i < parentOne.Length)
             {
                 if (i < rIndex || i >= lIndex)
                 {
-                    for (int j = 0; j < parentOne.Length; j++)
-                    {
-                        if (spanParentOne.Contains(spanParentTwo[j]) || child.Contains(spanParentTwo[j]))
-                        {
-                            continue;
-                        };
-                        child[i] = spanParentTwo[j];
-                    }
-                    i++;
+                    child[i] = queueOfLeftParentTwo.Dequeue();
                 }
                 i++;
             }
