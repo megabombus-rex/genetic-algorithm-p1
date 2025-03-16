@@ -1,8 +1,8 @@
 ﻿namespace ProblemSolvers.Solvers.Genetic.Selectors
 {
-    public class RouletteSelector
+    public static class RouletteSelector
     {
-        public int SelectParentIndexByRoulette(int[] populationFitnessScores, long fitnessSum)
+        public static int SelectParentIndexByRoulette(int[] populationFitnessScores, long fitnessSum)
         {
             var randomVal = new Random().NextInt64(0, fitnessSum);
             long currentFitnessSum = 0;

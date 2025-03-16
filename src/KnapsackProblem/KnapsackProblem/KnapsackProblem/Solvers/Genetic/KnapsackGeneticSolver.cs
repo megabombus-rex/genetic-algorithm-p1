@@ -16,7 +16,6 @@ namespace ProblemSolvers.Solvers.Genetic
         private readonly CrossoverType _crossoverTypeSelected = CrossoverType.OnePoint;
         private readonly MutationType _mutationTypeSelected = MutationType.SingleBitInversion;
 
-        private readonly RouletteSelector _populationSelector;
         private readonly BinaryCrossoverer _crossoverer;
         private readonly BinaryMutator _mutator;
 
@@ -37,14 +36,13 @@ namespace ProblemSolvers.Solvers.Genetic
             _crossoverTypeSelected = crossoverType;
             _mutationTypeSelected = mutationType;
 
-            _populationSelector = new RouletteSelector();
             _crossoverer = new BinaryCrossoverer();
             _mutator = new BinaryMutator();
 
             _populationFitnessScores = new int[algorithmData.PopulationSize];
             _populationEncoded = new int[algorithmData.PopulationSize][];
             _populationEncodedNextGen = new int[algorithmData.PopulationSize][];
-            _bestKnapsackData = new BestKnapsackData(KnapsackProblem.POSSIBLE_ITEMS_COUNT);
+            _bestKnapsackData = new BestKnapsackData(_knapsackProblem.PossibleItemCount);
             _currentIteration = 0;
             _sumOfFitness = 0;
         }
@@ -70,11 +68,11 @@ namespace ProblemSolvers.Solvers.Genetic
             var rng = new Random();
 
 
-            for (int i = 0; i < POPULATION_SIZE; i++)
+            for (int i = 0; i < _geneticAlgorithmData.PopulationSize; i++)
             {
-                _populationEncoded[i] = new int[KnapsackProblem.POSSIBLE_ITEMS_COUNT];
-                _populationEncodedNextGen[i] = new int[KnapsackProblem.POSSIBLE_ITEMS_COUNT];
-                for (int j = 0; j < KnapsackProblem.POSSIBLE_ITEMS_COUNT; j++)
+                _populationEncoded[i] = new int[_knapsackProblem.PossibleItemCount];
+                _populationEncodedNextGen[i] = new int[_knapsackProblem.PossibleItemCount];
+                for (int j = 0; j < _knapsackProblem.PossibleItemCount; j++)
                 {
                     _populationEncoded[i][j] = rng.Next(0, 2);
                 }
@@ -83,13 +81,13 @@ namespace ProblemSolvers.Solvers.Genetic
 
         private void SetFitnessForPopulation()
         {
-            for (int i = 0; i < POPULATION_SIZE; i++)
+            for (int i = 0; i < _geneticAlgorithmData.PopulationSize; i++)
             {
                 _knapsackProblem.SetupProblem(TranslateEncodedItemsToItemList(_populationEncoded[i]));
                 _populationFitnessScores[i] = _knapsackProblem.CalculateFitnessOfProblem();
             }
 
-            for (int i = 0; i < POPULATION_SIZE; i++)
+            for (int i = 0; i < _geneticAlgorithmData.PopulationSize; i++)
             {
                 if (_populationFitnessScores[i] > _bestKnapsackData.Fitness)
                 {
@@ -102,7 +100,7 @@ namespace ProblemSolvers.Solvers.Genetic
         private void SumFitnessesOfPopulation()
         {
             // sum all of the fitness scores
-            for (int i = 0; i < POPULATION_SIZE; i++)
+            for (int i = 0; i < _geneticAlgorithmData.PopulationSize; i++)
             {
                 _sumOfFitness += _populationFitnessScores[i];
             }
@@ -114,7 +112,9 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (selectionType)
             {
                 case SelectionType.Roulette:
-                    return _populationSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
+                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
+                case SelectionType.Tournament:
+                    return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores);
                 default:
                     throw new NotImplementedException($"Selection type {selectionType} not implemented.");
 
@@ -145,7 +145,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
         private void SetNewPopulationAsCurrent()
         {
-            for (int i = 0; i < POPULATION_SIZE - 1; i++)
+            for (int i = 0; i < _geneticAlgorithmData.PopulationSize - 1; i++)
             {
                 _populationEncoded[i] = _populationEncodedNextGen[i];
             }
@@ -179,14 +179,14 @@ namespace ProblemSolvers.Solvers.Genetic
 
                 // index keeping the currently selected 'individual' from the next population
                 int nextPopulationIndex = 0;
-                while (nextPopulationIndex < POPULATION_SIZE)
+                while (nextPopulationIndex < _geneticAlgorithmData.PopulationSize)
                 {
                     // proportional Selection
                     var parent1Index = SelectParentIndexForNextPopulation(_selectionTypeSelected);
                     var parent2Index = parent1Index;
 
                     // crossover or basic replication
-                    if (rng.NextDouble() < CROSSOVER_PROBABILITY)
+                    if (rng.NextDouble() < _geneticAlgorithmData.CrossoverProbability)
                     {
                         parent2Index = SelectParentIndexForNextPopulation(_selectionTypeSelected);
 
@@ -206,7 +206,7 @@ namespace ProblemSolvers.Solvers.Genetic
                     }
 
                     // mutate
-                    if (rng.NextDouble() < MUTATION_PROBABILITY)
+                    if (rng.NextDouble() < _geneticAlgorithmData.MutationProbability)
                     {
                         MutateIndividual(_populationEncodedNextGen[nextPopulationIndex], _mutationTypeSelected);
                     }

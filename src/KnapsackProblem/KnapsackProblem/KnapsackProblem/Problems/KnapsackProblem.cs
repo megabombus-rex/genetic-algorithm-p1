@@ -2,7 +2,7 @@
 {
     public class KnapsackProblem
     {
-        public const int POSSIBLE_ITEMS_COUNT = 15;
+        public readonly int PossibleItemCount = 15;
 
         private Knapsack _knapsack;
         private readonly Item[] _possibleItems = [
@@ -54,9 +54,11 @@
             return _knapsack.CurrentValue;
         }
 
-        public KnapsackProblem(double maxWeightInKgs)
+        public KnapsackProblem(double maxWeightInKgs, Item[] itemSet)
         {
             _knapsack = new Knapsack(maxWeightInKgs);
+            _possibleItems = itemSet;
+            PossibleItemCount = itemSet.Length;
         }
 
         public struct Item
