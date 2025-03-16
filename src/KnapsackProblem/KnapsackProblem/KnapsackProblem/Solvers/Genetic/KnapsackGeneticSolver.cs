@@ -1,4 +1,5 @@
-﻿using ProblemSolvers.CommonTypes.GAEnums;
+﻿using ProblemSolvers.CommonTypes;
+using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Crossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators;
@@ -10,16 +11,20 @@ namespace ProblemSolvers.Solvers.Genetic
     {
         private KnapsackProblem _knapsackProblem;
 
-        public const int ITERATIONS = 1000;
         public const int POPULATION_SIZE = 500;
         public const int N_POINTS_CROSSOVER = 4;
         public const double CROSSOVER_PROBABILITY = 0.7;
         public const double MUTATION_PROBABILITY = 0.001; // 0 <= MUTATION_PROBABILITY <= 1 
 
-        public const CrossoverType CROSSOVER_TYPE_SELECTED = CrossoverType.OnePoint;
-        public const MutationType MUTATION_TYPE_SELECTED = MutationType.SingleBitInversion;
-        public const SelectionType SELECTION_TYPE_SELECTED = SelectionType.Roulette;
+        private readonly GeneticAlgorithmData _geneticAlgorithmData;
 
+        private readonly SelectionType _selectionTypeSelected = SelectionType.Roulette;
+        private readonly CrossoverType _crossoverTypeSelected = CrossoverType.OnePoint;
+        private readonly MutationType _mutationTypeSelected = MutationType.SingleBitInversion;
+
+        private readonly RouletteSelector _populationSelector;
+        private readonly BinaryCrossoverer _crossoverer;
+        private readonly BinaryMutator _mutator;
 
         private int[] _populationFitnessScores;
         private int[][] _populationEncoded; // |0|0|1|1|1|1|0| etc.
@@ -29,12 +34,22 @@ namespace ProblemSolvers.Solvers.Genetic
         private int _currentIteration;
         private BestKnapsackData _bestKnapsackData;
 
-        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem)
+        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, CrossoverType crossoverType, MutationType mutationType, GeneticAlgorithmData algorithmData)
         {
             _knapsackProblem = knapsackProblem;
-            _populationFitnessScores = new int[POPULATION_SIZE];
-            _populationEncoded = new int[POPULATION_SIZE][];
-            _populationEncodedNextGen = new int[POPULATION_SIZE][];
+            _geneticAlgorithmData = algorithmData;
+
+            _selectionTypeSelected = selectionType;
+            _crossoverTypeSelected = crossoverType;
+            _mutationTypeSelected = mutationType;
+
+            _populationSelector = new RouletteSelector();
+            _crossoverer = new BinaryCrossoverer();
+            _mutator = new BinaryMutator();
+
+            _populationFitnessScores = new int[algorithmData.PopulationSize];
+            _populationEncoded = new int[algorithmData.PopulationSize][];
+            _populationEncodedNextGen = new int[algorithmData.PopulationSize][];
             _bestKnapsackData = new BestKnapsackData(KnapsackProblem.POSSIBLE_ITEMS_COUNT);
             _currentIteration = 0;
             _sumOfFitness = 0;
@@ -105,7 +120,7 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (selectionType)
             {
                 case SelectionType.Roulette:
-                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
+                    return _populationSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
                 default:
                     throw new NotImplementedException($"Selection type {selectionType} not implemented.");
 
@@ -117,7 +132,7 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (crossoverType)
             {
                 case CrossoverType.OnePoint:
-                    return BinaryCrossoverer.OnePointCrossover(_populationEncoded[p1Index], _populationEncoded[p2Index]);
+                    return _crossoverer.OnePointCrossover(_populationEncoded[p1Index], _populationEncoded[p2Index]);
                 default:
                     throw new NotImplementedException($"Crossover type {crossoverType} is not implemented.");
             }
@@ -128,7 +143,7 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (mutationType)
             {
                 case (MutationType.SingleBitInversion):
-                    return BinaryMutator.SingleBitInversionMutation(individual);
+                    return _mutator.SingleBitInversionMutation(individual);
                 default:
                     throw new NotImplementedException($"Mutation {mutationType} not implemented.");
             }
@@ -159,7 +174,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
             var rng = new Random();
 
-            while (_currentIteration < ITERATIONS)
+            while (_currentIteration < _geneticAlgorithmData.GenerationsAmount)
             {
                 Console.WriteLine($"Generation {_currentIteration}");
 
@@ -173,15 +188,15 @@ namespace ProblemSolvers.Solvers.Genetic
                 while (nextPopulationIndex < POPULATION_SIZE)
                 {
                     // proportional Selection
-                    var parent1Index = SelectParentIndexForNextPopulation(SELECTION_TYPE_SELECTED);
+                    var parent1Index = SelectParentIndexForNextPopulation(_selectionTypeSelected);
                     var parent2Index = parent1Index;
 
                     // crossover or basic replication
                     if (rng.NextDouble() < CROSSOVER_PROBABILITY)
                     {
-                        parent2Index = SelectParentIndexForNextPopulation(SELECTION_TYPE_SELECTED);
+                        parent2Index = SelectParentIndexForNextPopulation(_selectionTypeSelected);
 
-                        var crossoveredIndividual = CrossoverTwoParents(parent1Index, parent2Index, CROSSOVER_TYPE_SELECTED);
+                        var crossoveredIndividual = CrossoverTwoParents(parent1Index, parent2Index, _crossoverTypeSelected);
 
                         for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
                         {
@@ -199,7 +214,7 @@ namespace ProblemSolvers.Solvers.Genetic
                     // mutate
                     if (rng.NextDouble() < MUTATION_PROBABILITY)
                     {
-                        MutateIndividual(_populationEncodedNextGen[nextPopulationIndex], MUTATION_TYPE_SELECTED);
+                        MutateIndividual(_populationEncodedNextGen[nextPopulationIndex], _mutationTypeSelected);
                     }
 
                     nextPopulationIndex++;

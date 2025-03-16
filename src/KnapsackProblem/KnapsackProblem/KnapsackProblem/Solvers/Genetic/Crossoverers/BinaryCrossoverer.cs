@@ -1,8 +1,8 @@
 ﻿namespace ProblemSolvers.Solvers.Genetic.Crossoverers
 {
-    public static class BinaryCrossoverer
+    public class BinaryCrossoverer
     {
-        public static int[] OnePointCrossover(int[] parent1, int[] parent2)
+        public int[] OnePointCrossover(int[] parent1, int[] parent2)
         {
             var rng = new Random();
 
