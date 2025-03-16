@@ -10,13 +10,7 @@ namespace ProblemSolvers.Solvers.Genetic
     public class KnapsackGeneticSolver : ISolver
     {
         private KnapsackProblem _knapsackProblem;
-
-        public const int POPULATION_SIZE = 500;
-        public const int N_POINTS_CROSSOVER = 4;
-        public const double CROSSOVER_PROBABILITY = 0.7;
-        public const double MUTATION_PROBABILITY = 0.001; // 0 <= MUTATION_PROBABILITY <= 1 
-
-        private readonly GeneticAlgorithmData _geneticAlgorithmData;
+        private readonly GeneticAlgorithmGenericData _geneticAlgorithmData;
 
         private readonly SelectionType _selectionTypeSelected = SelectionType.Roulette;
         private readonly CrossoverType _crossoverTypeSelected = CrossoverType.OnePoint;
@@ -34,7 +28,7 @@ namespace ProblemSolvers.Solvers.Genetic
         private int _currentIteration;
         private BestKnapsackData _bestKnapsackData;
 
-        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, CrossoverType crossoverType, MutationType mutationType, GeneticAlgorithmData algorithmData)
+        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, CrossoverType crossoverType, MutationType mutationType, GeneticAlgorithmGenericData algorithmData)
         {
             _knapsackProblem = knapsackProblem;
             _geneticAlgorithmData = algorithmData;
