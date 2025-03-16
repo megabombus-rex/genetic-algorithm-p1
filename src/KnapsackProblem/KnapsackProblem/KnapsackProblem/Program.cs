@@ -4,6 +4,8 @@ using ProblemSolvers.CommonTypes;
 using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic;
+using ProblemSolvers.Solvers.Genetic.Crossoverers.BinaryCrossoverers;
+using ProblemSolvers.Solvers.Genetic.Crossoverers.CombinatoralCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 
@@ -45,20 +47,29 @@ public class Program
 
         // setup the solver
         var mutator = new SingleBitInversionMutator();
-        var knapsackGeneticSolver = new KnapsackGeneticSolver(knapsackProbem, SelectionType.Roulette, CrossoverType.OnePoint, mutator, GAdataKnapsack);
+        var crossoverer = new OnePointCrossoverer();
+        var knapsackGeneticSolver = new KnapsackGeneticSolver(knapsackProbem, SelectionType.Roulette, crossoverer, mutator, GAdataKnapsack);
         
-        var knapsackGeneticSolver2 = new KnapsackGeneticSolver(knapsackProbem, SelectionType.Tournament, CrossoverType.OnePoint, mutator, GAdataKnapsack);
+        var knapsackGeneticSolver2 = new KnapsackGeneticSolver(knapsackProbem, SelectionType.Tournament, crossoverer, mutator, GAdataKnapsack);
         
         // solve the problem
-        knapsackGeneticSolver.FindOptimalSolution();
+        //knapsackGeneticSolver.FindOptimalSolution();
 
         Console.WriteLine("\nSTOP STOP\n");
 
-        knapsackGeneticSolver2.FindOptimalSolution();
-        
+        //knapsackGeneticSolver2.FindOptimalSolution();
+
         // The program is as follows:
         // create a problem with methods for Evaluation and for encoded data translation to problem's data
         // setup a solver for given problem
-        
+
+        var crossovererOrdered = new OrderedCrossoverer();
+
+        int[] parentOne = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        int[] parentTwo = { 5, 7, 4, 9, 1, 3, 6, 2, 8 };
+
+        var child = crossovererOrdered.CrossoverParents(parentOne, parentTwo);
+
+        Console.WriteLine(string.Join("", child));
     }
 }

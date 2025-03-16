@@ -1,7 +1,7 @@
 ﻿using ProblemSolvers.CommonTypes;
 using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.Problems;
-using ProblemSolvers.Solvers.Genetic.Crossoverers;
+using ProblemSolvers.Solvers.Genetic.Crossoverers.BinaryCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators;
 using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
@@ -14,8 +14,6 @@ namespace ProblemSolvers.Solvers.Genetic
         private readonly GeneticAlgorithmGenericData _geneticAlgorithmData;
 
         private readonly SelectionType _selectionTypeSelected = SelectionType.Roulette;
-        private readonly CrossoverType _crossoverTypeSelected = CrossoverType.OnePoint;
-        private readonly MutationType _mutationTypeSelected = MutationType.SingleBitInversion;
 
         private readonly BinaryCrossoverer _crossoverer;
         private readonly BinaryMutator _mutator; // or a binary mutator
@@ -28,15 +26,14 @@ namespace ProblemSolvers.Solvers.Genetic
         private int _currentIteration;
         private BestKnapsackData _bestKnapsackData;
 
-        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, CrossoverType crossoverType, BinaryMutator mutator, GeneticAlgorithmGenericData algorithmData)
+        public KnapsackGeneticSolver(KnapsackProblem knapsackProblem, SelectionType selectionType, BinaryCrossoverer crossoverer, BinaryMutator mutator, GeneticAlgorithmGenericData algorithmData)
         {
             _knapsackProblem = knapsackProblem;
             _geneticAlgorithmData = algorithmData;
 
             _selectionTypeSelected = selectionType;
-            _crossoverTypeSelected = crossoverType;
 
-            _crossoverer = new BinaryCrossoverer();
+            _crossoverer = crossoverer;
             _mutator = mutator;
 
             _populationFitnessScores = new int[algorithmData.PopulationSize];
@@ -179,7 +176,7 @@ namespace ProblemSolvers.Solvers.Genetic
                     {
                         parent2Index = SelectParentIndexForNextPopulation(_selectionTypeSelected);
 
-                        var crossoveredIndividual = CrossoverTwoParents(parent1Index, parent2Index, _crossoverTypeSelected);
+                        var crossoveredIndividual = _crossoverer.CrossoverParents(_populationEncoded[parent1Index], _populationEncoded[parent2Index]);
 
                         for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
                         {
