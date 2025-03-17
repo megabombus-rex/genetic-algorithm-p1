@@ -8,6 +8,7 @@ using ProblemSolvers.Solvers.Genetic.Crossoverers.BinaryCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Crossoverers.CombinatoralCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
+using System.Numerics;
 
 public class Program
 {
@@ -63,15 +64,31 @@ public class Program
         // create a problem with methods for Evaluation and for encoded data translation to problem's data
         // setup a solver for given problem
 
-        var crossovererOrdered = new OrderedCrossoverer();
+        //var crossovererOrdered = new OrderedCrossoverer();
 
-        int[] parentOne = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        int[] parentTwo = { 5, 7, 4, 9, 1, 3, 6, 12, 8, 11, 10, 2 };
+        //int[] parentOne = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        //int[] parentTwo = { 5, 7, 4, 9, 1, 3, 6, 12, 8, 11, 10, 2 };
 
-        var child = crossovererOrdered.CrossoverParents(parentOne, parentTwo);
+        //var child = crossovererOrdered.CrossoverParents(parentOne, parentTwo);
 
-        Console.WriteLine("Parent A: " + string.Join(",", parentOne));
-        Console.WriteLine("Parent B: " + string.Join(",", parentTwo));
-        Console.WriteLine("Child: " + string.Join(",", child));
+        //Console.WriteLine("Parent A: " + string.Join(",", parentOne));
+        //Console.WriteLine("Parent B: " + string.Join(",", parentTwo));
+        //Console.WriteLine("Child: " + string.Join(",", child));
+
+        // setup the cVR Problem
+        CVRProblem cvrpOne = new CVRProblem();
+        var cvrpOneCities = new CVRProblem.City[]
+        {
+            new CVRProblem.City(1, new Vector2(15.0f, 12.0f), 5),
+            new CVRProblem.City(2, new Vector2(10.0f, 1.0f), 10),
+            new CVRProblem.City(3, new Vector2(-5.0f, 12.0f), 15),
+        };
+        var cvrpOneTruckCapacity = 25;
+        cvrpOne.SetupProblem(cvrpOneCities, cvrpOneTruckCapacity);
+
+
+        // the int array should be provided by the solver
+        Console.WriteLine(cvrpOne.CalculateFitness(new int[] { 3, 2, 1 }));
+
     }
 }

@@ -2,7 +2,7 @@
 {
     public class KnapsackProblem
     {
-        public readonly int PossibleItemCount = 15;
+        public int PossibleItemCount { get { return _possibleItems.Length; } }
 
         private Knapsack _knapsack;
         private readonly Item[] _possibleItems = [
