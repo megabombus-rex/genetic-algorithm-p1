@@ -64,7 +64,6 @@ namespace ProblemSolvers.Solvers.Genetic
         {
             var rng = new Random();
 
-
             for (int i = 0; i < _geneticAlgorithmData.PopulationSize; i++)
             {
                 _populationEncoded[i] = new int[_knapsackProblem.PossibleItemCount];

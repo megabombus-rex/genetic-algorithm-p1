@@ -58,7 +58,6 @@
         {
             _knapsack = new Knapsack(maxWeightInKgs);
             _possibleItems = itemSet;
-            PossibleItemCount = itemSet.Length;
         }
 
         public struct Item
