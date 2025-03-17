@@ -11,10 +11,12 @@ namespace ProblemSolvers.Problems
         // each index is a number of a city, the value is a capacity taken from the truck
         private City[] _problemCities;
 
+        // genome size
         public int CitiesCount { get { return _problemCities.Length; } }
 
+        private double _distancesSum;
+
         // complete graph - from every city to every city (depot too)
-        // between different cities there is constant 
         // every city will be entered once
 
         // [1, 2, 3, 4, 5] -> city 1, city 2, city 3, city 4, city 5
@@ -22,6 +24,7 @@ namespace ProblemSolvers.Problems
         {
             _truckCapacity = 20;
             _problemCities = Array.Empty<City>();
+            _distancesSum = 0;
         }
 
         public void SetupProblem(City[] cities, int truckCapacity)
@@ -35,12 +38,25 @@ namespace ProblemSolvers.Problems
                 c.CalculateAndSetDistanceToOtherCities(cities);
             }
 
+            // sum all of the roads and distances between cities and depot
+            foreach (City c in cities)
+            {
+                foreach (var key in  c.DistancesToOtherCities.Keys)
+                {
+                    _distancesSum += c.DistancesToOtherCities[key];
+                }
+                _distancesSum += c.DistanceToDepot;
+            }
+
             _truckCapacity = truckCapacity;
         }
 
 
+        // at the moemnt higher fitness -> worse performance (distance = fitness)
+        // maybe fitness => sumOfDistances / distanceRan
+
         // cities visited are the numbers of the cities in an array
-        public long CalculateFitness(int[] citiesVisited)
+        public int CalculateFitness(int[] citiesVisited)
         {
             // cities visited
             // |5|3|2|4|1|6| -> 5th number, 4th index
@@ -50,7 +66,7 @@ namespace ProblemSolvers.Problems
             var distanceRan = 0.0;
             var currentCapacity = _truckCapacity;
 
-            Console.WriteLine($"Truck loaded: {currentCapacity}");
+            //Console.WriteLine($"Truck loaded: {currentCapacity}");
 
             var currentCity = _problemCities[citiesVisited[0] - 1];
             distanceRan += currentCity.DistanceToDepot;
@@ -67,21 +83,23 @@ namespace ProblemSolvers.Problems
                 {
                     currentCapacity -= currentCity.ProduceDemand;
                     distanceRan += previousCity.DistancesToOtherCities[currentCity.Number];
-                    Console.WriteLine($"Distance ran {distanceRan}.");
+                    //Console.WriteLine($"Distance ran {distanceRan}.");
                     continue;
                 }
-                Console.WriteLine($"Capacity reached, {currentCity.ProduceDemand}, currently: {currentCapacity}.");
+                //Console.WriteLine($"Capacity reached, {currentCity.ProduceDemand}, currently: {currentCapacity}.");
 
                 // come back from the previous city
                 distanceRan += previousCity.DistanceToDepot;
 
                 // go to the next city from the depot
                 distanceRan += currentCity.DistanceToDepot;
-                Console.WriteLine($"Distance ran {distanceRan}.");
+                //Console.WriteLine($"Distance ran {distanceRan}.");
                 currentCapacity = _truckCapacity - currentCity.ProduceDemand;
             }
 
-            return (long)double.Round(distanceRan, 5);
+            var fitness = Math.Ceiling(_distancesSum / distanceRan * 1000);
+
+            return (int)fitness;
         }
 
         public class City : IComparable<City>
