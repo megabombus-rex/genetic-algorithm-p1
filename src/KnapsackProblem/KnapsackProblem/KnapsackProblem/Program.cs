@@ -1,6 +1,4 @@
-﻿// Knapsack problem is an optimization problem. Search for the most value taken for full backpack.
-// Eg. laptop (1000, 1.5kg), keys (300, 0.05kg), wallet (500, 0.2kg), cup (100, 0.5kg) etc. and backpack has storage of x kgs.
-using ProblemSolvers.CommonTypes;
+﻿using ProblemSolvers.CommonTypes;
 using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic;
@@ -16,6 +14,10 @@ public class Program
     private static void Main(string[] args)
     {
         Console.WriteLine("Dum dum dummmmm.");
+        // The program is as follows:
+        // create a problem with methods for Evaluation and for encoded data translation to problem's data
+        // setup a solver for given problem
+
 
         // setup differently
         // RouletteSelector - const, no stuff to change
@@ -51,30 +53,9 @@ public class Program
         var mutator = new SingleBitInversionMutator();
         var crossoverer = new OnePointCrossoverer();
         var knapsackGeneticSolver = new KnapsackGeneticSolver(knapsackProbem, SelectionType.Roulette, crossoverer, mutator, GAdataKnapsack);
-        
-        var knapsackGeneticSolver2 = new KnapsackGeneticSolver(knapsackProbem, SelectionType.Tournament, crossoverer, mutator, GAdataKnapsack);
-        
+
         // solve the problem
         //knapsackGeneticSolver.FindOptimalSolution();
-
-        Console.WriteLine("\nSTOP STOP\n");
-
-        //knapsackGeneticSolver2.FindOptimalSolution();
-
-        // The program is as follows:
-        // create a problem with methods for Evaluation and for encoded data translation to problem's data
-        // setup a solver for given problem
-
-        //var crossovererOrdered = new OrderedCrossoverer();
-
-        //int[] parentOne = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        //int[] parentTwo = { 5, 7, 4, 9, 1, 3, 6, 12, 8, 11, 10, 2 };
-
-        //var child = crossovererOrdered.CrossoverParents(parentOne, parentTwo);
-
-        //Console.WriteLine("Parent A: " + string.Join(",", parentOne));
-        //Console.WriteLine("Parent B: " + string.Join(",", parentTwo));
-        //Console.WriteLine("Child: " + string.Join(",", child));
 
         // setup the cVR Problem
         CVRProblem cvrpOne = new CVRProblem();
@@ -103,9 +84,5 @@ public class Program
         var cvrpGeneticSolver = new CVRPGeneticSolver(SelectionType.Roulette, crossovererCVRP, mutatorCVRP, GAdataCVRP, cvrpOne);
 
         cvrpGeneticSolver.FindOptimalSolution();
-
-        // the int array should be provided by the solver
-        //Console.WriteLine(cvrpOne.CalculateFitness(new int[] { 3, 2, 1 }));
-
     }
 }

@@ -117,17 +117,6 @@ namespace ProblemSolvers.Solvers.Genetic
             }
         }
 
-        private int[] CrossoverTwoParents(int p1Index, int p2Index, CrossoverType crossoverType)
-        {
-            switch (crossoverType)
-            {
-                case CrossoverType.OnePoint:
-                    return _crossoverer.OnePointCrossover(_populationEncoded[p1Index], _populationEncoded[p2Index]);
-                default:
-                    throw new NotImplementedException($"Crossover type {crossoverType} is not implemented.");
-            }
-        }
-
         private void SetNewPopulationAsCurrent()
         {
             for (int i = 0; i < _geneticAlgorithmData.PopulationSize - 1; i++)

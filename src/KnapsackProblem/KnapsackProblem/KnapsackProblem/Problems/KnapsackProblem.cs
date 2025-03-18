@@ -2,6 +2,8 @@
 
 namespace ProblemSolvers.Problems
 {
+    // Knapsack problem is an optimization problem. Search for the most value taken for full backpack.
+    // Eg. laptop (1000, 1.5kg), keys (300, 0.05kg), wallet (500, 0.2kg), cup (100, 0.5kg) etc. and backpack has storage of x kgs.
     public class KnapsackProblem
     {
         public const GoodPopulationFitness FitnessType = GoodPopulationFitness.MoreIsBetter;
