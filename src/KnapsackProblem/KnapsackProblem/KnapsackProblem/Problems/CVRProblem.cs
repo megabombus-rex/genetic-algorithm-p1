@@ -17,8 +17,6 @@ namespace ProblemSolvers.Problems
         // genome size
         public int CitiesCount { get { return _problemCities.Length; } }
 
-        private double _distancesSum;
-
         // complete graph - from every city to every city (depot too)
         // every city will be entered once
 
@@ -27,7 +25,6 @@ namespace ProblemSolvers.Problems
         {
             _truckCapacity = 20;
             _problemCities = Array.Empty<City>();
-            _distancesSum = 0;
         }
 
         public void SetupProblem(City[] cities, int truckCapacity)
@@ -39,16 +36,6 @@ namespace ProblemSolvers.Problems
             foreach (City c in cities)
             {
                 c.CalculateAndSetDistanceToOtherCities(cities);
-            }
-
-            // sum all of the roads and distances between cities and depot
-            foreach (City c in cities)
-            {
-                foreach (var key in  c.DistancesToOtherCities.Keys)
-                {
-                    _distancesSum += c.DistancesToOtherCities[key];
-                }
-                _distancesSum += c.DistanceToDepot;
             }
 
             _truckCapacity = truckCapacity;
