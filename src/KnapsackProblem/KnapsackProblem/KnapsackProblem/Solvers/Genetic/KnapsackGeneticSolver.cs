@@ -108,9 +108,9 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (selectionType)
             {
                 case SelectionType.Roulette:
-                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness, GoodPopulationFitness.MoreIsBetter);
+                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness, KnapsackProblem.FitnessType);
                 case SelectionType.Tournament:
-                    return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores);
+                    return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores, KnapsackProblem.FitnessType);
                 default:
                     throw new NotImplementedException($"Selection type {selectionType} not implemented.");
 

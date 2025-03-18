@@ -1,7 +1,11 @@
-﻿namespace ProblemSolvers.Problems
+﻿using ProblemSolvers.CommonTypes.GAEnums;
+
+namespace ProblemSolvers.Problems
 {
     public class KnapsackProblem
     {
+        public const GoodPopulationFitness FitnessType = GoodPopulationFitness.MoreIsBetter;
+
         public int PossibleItemCount { get { return _possibleItems.Length; } }
 
         private Knapsack _knapsack;

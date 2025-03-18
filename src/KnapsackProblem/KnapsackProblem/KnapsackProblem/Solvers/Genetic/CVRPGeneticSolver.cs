@@ -148,7 +148,8 @@ namespace ProblemSolvers.Solvers.Genetic
                 var calculatedFitness = _problem.CalculateFitness(_populationEncoded[i]);
                 _populationFitnessScores[i] = calculatedFitness;
 
-                if (calculatedFitness > _bestCVRPData.Fitness)
+                // less is better
+                if (calculatedFitness < _bestCVRPData.Fitness)
                 {
                     _bestCVRPData.UpdateBestCVRPData(_currentIteration, calculatedFitness, _populationEncoded[i]);
                 }
@@ -171,7 +172,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 case SelectionType.Roulette:
                     return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness, CVRProblem.FitnessType);
                 case SelectionType.Tournament:
-                    return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores);
+                    return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores, CVRProblem.FitnessType);
                 default:
                     throw new NotImplementedException($"Selection type {selectionType} not implemented.");
 
@@ -195,6 +196,7 @@ namespace ProblemSolvers.Solvers.Genetic
             public BestCVRPData(int genomeSize)
             {
                 Genome = new int[genomeSize];
+                Fitness = double.MaxValue;
             }
 
             public void UpdateBestCVRPData(int iteration, double fitness, int[] genome)
