@@ -108,7 +108,7 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (selectionType)
             {
                 case SelectionType.Roulette:
-                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
+                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness, GoodPopulationFitness.MoreIsBetter);
                 case SelectionType.Tournament:
                     return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores);
                 default:

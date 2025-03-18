@@ -1,10 +1,13 @@
-﻿using System.Numerics;
+﻿using ProblemSolvers.CommonTypes.GAEnums;
+using System.Numerics;
 
 namespace ProblemSolvers.Problems
 {
     public class CVRProblem
     {
         // Problem: https://en.wikipedia.org/wiki/Vehicle_routing_problem
+
+        public const GoodPopulationFitness FitnessType = GoodPopulationFitness.LessIsBetter;
 
         private int _truckCapacity = 20;
 
@@ -56,7 +59,7 @@ namespace ProblemSolvers.Problems
         // maybe fitness => sumOfDistances / distanceRan
 
         // cities visited are the numbers of the cities in an array
-        public int CalculateFitness(int[] citiesVisited)
+        public double CalculateFitness(int[] citiesVisited)
         {
             // cities visited
             // |5|3|2|4|1|6| -> 5th number, 4th index
@@ -97,9 +100,7 @@ namespace ProblemSolvers.Problems
                 currentCapacity = _truckCapacity - currentCity.ProduceDemand;
             }
 
-            var fitness = Math.Ceiling(_distancesSum / distanceRan * 1000);
-
-            return (int)fitness;
+            return distanceRan;
         }
 
         public class City : IComparable<City>

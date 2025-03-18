@@ -17,10 +17,10 @@ namespace ProblemSolvers.Solvers.Genetic
 
         private CVRProblem _problem;
 
-        private int[] _populationFitnessScores;
+        private double[] _populationFitnessScores;
         private int[][] _populationEncoded; // |0|0|1|1|1|1|0| etc.
         private int[][] _populationEncodedNextGen; // |0|0|1|1|1|1|0| etc.
-        private long _sumOfFitness;
+        private double _sumOfFitness;
 
         private int _currentIteration;
         private BestCVRPData _bestCVRPData;
@@ -37,7 +37,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
             _populationEncoded = new int[data.PopulationSize][];
             _populationEncodedNextGen = new int[data.PopulationSize][];
-            _populationFitnessScores = new int[data.PopulationSize];
+            _populationFitnessScores = new double[data.PopulationSize];
             _sumOfFitness = 0;
 
             _currentIteration = 0;
@@ -141,7 +141,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
         private void EvaluatePopulation()
         {
-            var bestFitnessPerPopulation = 0;
+            var bestFitnessPerPopulation = 0.0;
 
             for (int i = 0; i < _populationEncoded.Length; i++)
             {
@@ -169,7 +169,7 @@ namespace ProblemSolvers.Solvers.Genetic
             switch (selectionType)
             {
                 case SelectionType.Roulette:
-                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness);
+                    return RouletteSelector.SelectParentIndexByRoulette(_populationFitnessScores, _sumOfFitness, CVRProblem.FitnessType);
                 case SelectionType.Tournament:
                     return TournamentSelector.SelectParentIndexByTournament(_populationEncoded, _populationFitnessScores);
                 default:
@@ -189,7 +189,7 @@ namespace ProblemSolvers.Solvers.Genetic
         public class BestCVRPData
         {
             public int Iteration;
-            public long Fitness;
+            public double Fitness;
             public int[] Genome;
 
             public BestCVRPData(int genomeSize)
@@ -197,7 +197,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 Genome = new int[genomeSize];
             }
 
-            public void UpdateBestCVRPData(int iteration, long fitness, int[] genome)
+            public void UpdateBestCVRPData(int iteration, double fitness, int[] genome)
             {
                 Iteration = iteration;
                 Fitness = fitness;

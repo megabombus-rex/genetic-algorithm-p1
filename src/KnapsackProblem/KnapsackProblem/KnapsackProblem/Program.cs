@@ -91,6 +91,7 @@ public class Program
             new CVRProblem.City(9, new Vector2(0.0f, 11.0f), 4),
             new CVRProblem.City(10, new Vector2(0.0f, 32.0f), 4),
         };
+
         var cvrpOneTruckCapacity = 25;
         cvrpOne.SetupProblem(cvrpOneCities, cvrpOneTruckCapacity);
 

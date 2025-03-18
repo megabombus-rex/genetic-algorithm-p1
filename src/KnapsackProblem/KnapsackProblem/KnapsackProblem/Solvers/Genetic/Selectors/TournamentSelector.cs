@@ -4,7 +4,7 @@
     {
         public static int TournamentContestants = 4;
         
-        public static int SelectParentIndexByTournament(int[][] populationEncoded, int[] populationFitnessScores)
+        public static int SelectParentIndexByTournament(int[][] populationEncoded, dynamic populationFitnessScores)
         {
             if (populationFitnessScores.Length < TournamentContestants)
             {
