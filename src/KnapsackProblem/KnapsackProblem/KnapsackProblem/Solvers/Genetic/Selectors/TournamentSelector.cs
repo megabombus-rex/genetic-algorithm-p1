@@ -1,4 +1,4 @@
-﻿using ProblemSolvers.CommonTypes.GAEnums;
+﻿using ProblemSolvers.CommonTypes.GenericData;
 
 namespace ProblemSolvers.Solvers.Genetic.Selectors
 {

@@ -1,4 +1,4 @@
-﻿using ProblemSolvers.CommonTypes.GAEnums;
+﻿using ProblemSolvers.CommonTypes.GenericData;
 using System.Numerics;
 
 namespace ProblemSolvers.Problems

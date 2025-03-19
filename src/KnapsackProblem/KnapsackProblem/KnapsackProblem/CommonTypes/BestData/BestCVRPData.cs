@@ -16,7 +16,7 @@
         {
             Iteration = iteration;
             Fitness = fitness;
-            Array.ConstrainedCopy(genome, 0, Genome, 0, Genome.Length);
+            Array.Copy(genome, Genome, Genome.Length);
         }
     }
 }
