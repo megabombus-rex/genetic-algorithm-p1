@@ -1,4 +1,5 @@
-﻿using ProblemSolvers.Problems;
+﻿using ProblemSolvers.CommonTypes.BestData;
+using ProblemSolvers.Problems;
 
 namespace ProblemSolvers.Solvers.Greedy
 {
@@ -100,8 +101,7 @@ namespace ProblemSolvers.Solvers.Greedy
             }
 
             var distanceRan = _problem.CalculateFitness(citiesSeenArray);
-
-            Console.WriteLine($"Fitness found by the problem is {distanceRan}, represented by the list [{string.Join("|", citiesSeenArray)}].");
+            Console.WriteLine($"Best fitness occured for: [{string.Join("|", citiesSeenArray)}] with fitness score: {distanceRan}.");
         }
     }
 }
