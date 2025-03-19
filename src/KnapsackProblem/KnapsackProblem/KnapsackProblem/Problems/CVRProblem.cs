@@ -14,6 +14,10 @@ namespace ProblemSolvers.Problems
         // each index is a number of a city, the value is a capacity taken from the truck
         private City[] _problemCities;
 
+        public int TruckCapacity {  get { return _truckCapacity; } }
+
+        public City[] ProblemCities { get { return _problemCities; } }
+
         // genome size
         public int CitiesCount { get { return _problemCities.Length; } }
 
@@ -124,6 +128,8 @@ namespace ProblemSolvers.Problems
 
             public int CompareTo(City? other)
             {
+                if (other == null) return 0;
+
                 if (other.Number > this.Number)
                 {
                     return -1;
