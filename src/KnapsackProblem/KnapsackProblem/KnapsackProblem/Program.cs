@@ -8,6 +8,7 @@ using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 using ProblemSolvers.Solvers.Greedy;
+using ProblemSolvers.Solvers.RandomSearch;
 using System.Numerics;
 
 public class Program
@@ -78,14 +79,17 @@ public class Program
         cvrpOne.SetupProblem(cvrpOneCities, cvrpOneTruckCapacity);
 
         var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 1000, PopulationSize: 500, CrossoverProbability: 0.7, MutationProbability: 0.01);
-
         var crossovererCVRP = new OrderedCrossoverer();
         var mutatorCVRP = new InvertedCombinationMutator();
 
+        var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
+
         var cvrpGeneticSolver = new CVRPGeneticSolver(SelectionType.Roulette, crossovererCVRP, mutatorCVRP, GAdataCVRP, cvrpOne);
         var cvrpGreedySolver = new CVRPGreedySolver(cvrpOne);
+        var cvrpRandomSolver = new CVRPRandomSearchSolver(cvrpOne, RSdataCVRP);
 
         cvrpGeneticSolver.FindOptimalSolution();
         cvrpGreedySolver.FindOptimalSolution();
+        cvrpRandomSolver.FindOptimalSolution();
     }
 }
