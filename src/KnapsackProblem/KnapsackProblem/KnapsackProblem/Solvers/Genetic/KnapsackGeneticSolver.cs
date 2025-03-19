@@ -2,12 +2,13 @@
 using ProblemSolvers.CommonTypes.GenericData;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Crossoverers.BinaryCrossoverers;
-using ProblemSolvers.Solvers.Genetic.Mutators;
 using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 
 namespace ProblemSolvers.Solvers.Genetic
 {
+    //  My own implementation based off the information gathered on video by Kie: https://www.youtube.com/watch?v=uQj5UNhCPuo&ab_channel=KieCodes
+    //  The information was gathered from Genetic Algorithms: Theory and Applications, Lecture Notes, Third Edition—Winter 2003/2004 by Ulrich Bodenhofer
     public class KnapsackGeneticSolver : ISolver
     {
         private KnapsackProblem _knapsackProblem;

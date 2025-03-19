@@ -4,6 +4,7 @@ using ProblemSolvers.Problems;
 
 namespace ProblemSolvers.Solvers.RandomSearch
 {
+    // own implementation
     public class CVRPRandomSearchSolver : ISolver
     {
         private CVRProblem _problem;

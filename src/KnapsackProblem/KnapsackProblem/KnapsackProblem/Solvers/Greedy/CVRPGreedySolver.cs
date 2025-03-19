@@ -1,8 +1,8 @@
-﻿using ProblemSolvers.CommonTypes.BestData;
-using ProblemSolvers.Problems;
+﻿using ProblemSolvers.Problems;
 
 namespace ProblemSolvers.Solvers.Greedy
 {
+    // The implementation done by me, based off the problem calculation of fitness. Closest possible city -> optimal local solution.
     public class CVRPGreedySolver : ISolver
     {
         private CVRProblem _problem;

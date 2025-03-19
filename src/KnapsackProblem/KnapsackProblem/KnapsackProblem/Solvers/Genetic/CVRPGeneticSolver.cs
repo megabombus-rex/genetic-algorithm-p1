@@ -8,6 +8,7 @@ using ProblemSolvers.Solvers.Genetic.Selectors;
 
 namespace ProblemSolvers.Solvers.Genetic
 {
+    // own implementation based off KnapsackGeneticSolver
     public class CVRPGeneticSolver : ISolver
     {
         private readonly SelectionType _selectionType;
