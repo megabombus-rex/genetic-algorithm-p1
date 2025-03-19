@@ -1,4 +1,5 @@
 ﻿using ProblemSolvers.CommonTypes;
+using ProblemSolvers.CommonTypes.BestData;
 using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Crossoverers.CombinatoralCrossoverers;
@@ -47,6 +48,13 @@ namespace ProblemSolvers.Solvers.Genetic
 
         public void FindOptimalSolution()
         {
+
+            if (_problem.CitiesCount < 1)
+            {
+                Console.WriteLine("Empty city list, fitness = 0.");
+                return;
+            }
+
             // Create population
             CreateInitialPopulation();
 
@@ -182,25 +190,5 @@ namespace ProblemSolvers.Solvers.Genetic
             }
         }
 
-        public class BestCVRPData
-        {
-            public int Iteration;
-            public double Fitness;
-            public int[] Genome;
-
-            public BestCVRPData(int genomeSize)
-            {
-                Genome = new int[genomeSize];
-                Fitness = double.MaxValue;
-            }
-
-            public void UpdateBestCVRPData(int iteration, double fitness, int[] genome)
-            {
-                Iteration = iteration;
-                Fitness = fitness;
-                Array.ConstrainedCopy(genome, 0, Genome, 0, Genome.Length);
-            }
-
-        }
     }
 }
