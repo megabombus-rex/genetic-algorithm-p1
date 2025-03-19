@@ -7,6 +7,7 @@ using ProblemSolvers.Solvers.Genetic.Crossoverers.CombinatoralCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators.BinaryMutators;
 using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
+using ProblemSolvers.Solvers.Greedy;
 using System.Numerics;
 
 public class Program
@@ -82,7 +83,9 @@ public class Program
         var mutatorCVRP = new InvertedCombinationMutator();
 
         var cvrpGeneticSolver = new CVRPGeneticSolver(SelectionType.Roulette, crossovererCVRP, mutatorCVRP, GAdataCVRP, cvrpOne);
+        var cvrpGreedySolver = new CVRPGreedySolver(cvrpOne);
 
         cvrpGeneticSolver.FindOptimalSolution();
+        cvrpGreedySolver.FindOptimalSolution();
     }
 }

@@ -109,13 +109,8 @@ namespace ProblemSolvers.Solvers.Genetic
                 _currentIteration++;
             }
 
-            Console.WriteLine($"Best fitness occured in iteration {_bestCVRPData.Iteration} for: {string.Join("", _bestCVRPData.Genome)} with fitness score: {_bestCVRPData.Fitness}.");
+            Console.WriteLine($"Best fitness occured in iteration {_bestCVRPData.Iteration} for: [{string.Join("|", _bestCVRPData.Genome)}] with fitness score: {_bestCVRPData.Fitness}.");
 
-        }
-
-        public void LoadInput(string data)
-        {
-            throw new NotImplementedException();
         }
 
         private void CreateInitialPopulation()
