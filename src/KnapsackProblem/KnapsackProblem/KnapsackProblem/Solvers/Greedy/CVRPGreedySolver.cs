@@ -23,16 +23,14 @@ namespace ProblemSolvers.Solvers.Greedy
 
             // every city that has to be seen
             var citiesToSee = _problem.ProblemCities.ToList();
-            double currentDistance = 0.0;
 
-            // start from the depot
+            // start from the depot, distance does not have to be calculated here
             var currentCapacity = _problem.TruckCapacity;
             
             // first city, will throw an error if citiesToSee is empty
             var currentCity = citiesToSee.OrderBy(x => x.DistanceToDepot).First();
             citiesSeenArray[0] = currentCity.Number;
             currentCapacity -= currentCity.ProduceDemand;
-            currentDistance += currentCity.DistanceToDepot;
             var citiesSeen = 1;
 
             // we are after the first depot
@@ -48,7 +46,6 @@ namespace ProblemSolvers.Solvers.Greedy
                 if (citiesPossible.Count() < 1)
                 {
                     // come back to the depot
-                    currentDistance += currentCity!.DistanceToDepot;
                     currentCapacity = _problem.TruckCapacity;
                     startFromDepot = true;
 
@@ -62,7 +59,6 @@ namespace ProblemSolvers.Solvers.Greedy
                     // next closest city
                     currentCity = citiesPossible.OrderBy(x => x.DistanceToDepot).FirstOrDefault();
 
-                    currentDistance += currentCity!.DistanceToDepot;
                     currentCapacity -= currentCity.ProduceDemand;
                     citiesSeenArray[citiesSeen] = currentCity.Number;
                     citiesSeen++;
@@ -91,9 +87,6 @@ namespace ProblemSolvers.Solvers.Greedy
                     }
                 }
 
-                // distance from previous city to the next
-                currentDistance += currentCity.DistancesToOtherCities[selectedNr];
-
                 // we are now in the next city
                 currentCity = citiesPossible.FirstOrDefault(x => x.Number == selectedNr);
                 citiesSeenArray[citiesSeen] = selectedNr;
@@ -106,7 +99,9 @@ namespace ProblemSolvers.Solvers.Greedy
                 citiesSeen++;
             }
 
-            Console.WriteLine($"Fitness found by the algorithm is {currentDistance}, represented by the list [{string.Join("|", citiesSeenArray)}].");
+            var distanceRan = _problem.CalculateFitness(citiesSeenArray);
+
+            Console.WriteLine($"Fitness found by the problem is {distanceRan}, represented by the list [{string.Join("|", citiesSeenArray)}].");
         }
     }
 }
