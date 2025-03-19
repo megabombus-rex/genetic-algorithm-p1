@@ -7,7 +7,7 @@ namespace ProblemSolvers.Problems
     {
         // Problem: https://en.wikipedia.org/wiki/Vehicle_routing_problem
 
-        public const GoodPopulationFitness FitnessType = GoodPopulationFitness.LessIsBetter;
+        public const PopulationFitnessType FitnessType = PopulationFitnessType.LessIsBetter;
 
         private int _truckCapacity = 20;
 

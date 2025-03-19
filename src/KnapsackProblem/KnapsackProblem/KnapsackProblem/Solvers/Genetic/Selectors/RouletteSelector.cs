@@ -6,13 +6,13 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
     public static class RouletteSelector
     {
         // different array types for numbers only
-        public static int SelectParentIndexByRoulette(dynamic populationFitnessScores, dynamic fitnessSum, GoodPopulationFitness fitnessType)
+        public static int SelectParentIndexByRoulette(dynamic populationFitnessScores, dynamic fitnessSum, PopulationFitnessType fitnessType)
         {
             switch (fitnessType)
             {
-                case GoodPopulationFitness.MoreIsBetter:
+                case PopulationFitnessType.MoreIsBetter:
                     return SelectParentIndexMoreIsBetter(populationFitnessScores, fitnessSum);
-                case GoodPopulationFitness.LessIsBetter:
+                case PopulationFitnessType.LessIsBetter:
                     return SelectParentIndexLessIsBetter(populationFitnessScores);
                 default:
                     return 0;

@@ -8,13 +8,13 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
 
 
         // different array types for numbers only
-        public static int SelectParentIndexByTournament(int[][] populationEncoded, dynamic populationFitnessScores, GoodPopulationFitness fitnessType)
+        public static int SelectParentIndexByTournament(int[][] populationEncoded, dynamic populationFitnessScores, PopulationFitnessType fitnessType)
         {
             switch (fitnessType)
             {
-                case GoodPopulationFitness.MoreIsBetter:
+                case PopulationFitnessType.MoreIsBetter:
                     return SelectParentIndexByTournamentMoreIsBetter(populationEncoded, populationFitnessScores);
-                case GoodPopulationFitness.LessIsBetter:
+                case PopulationFitnessType.LessIsBetter:
                     return SelectParentIndexByTournamentLessIsBetter(populationEncoded, populationFitnessScores);
                 default:
                     return 0;
