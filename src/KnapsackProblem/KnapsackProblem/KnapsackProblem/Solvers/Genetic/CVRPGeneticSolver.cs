@@ -1,6 +1,6 @@
-﻿using ProblemSolvers.CommonTypes;
-using ProblemSolvers.CommonTypes.BestData;
+﻿using ProblemSolvers.CommonTypes.BestData;
 using ProblemSolvers.CommonTypes.GAEnums;
+using ProblemSolvers.CommonTypes.GenericData;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Crossoverers.CombinatoralCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
