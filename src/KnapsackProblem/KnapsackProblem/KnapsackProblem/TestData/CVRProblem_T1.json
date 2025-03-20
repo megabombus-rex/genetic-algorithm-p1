@@ -1,0 +1,29 @@
+{
+  "TruckCapacity": 25,
+  "Cities": [
+    {
+      "Number": 1,
+      "Position": {
+        "X": "1.0",
+        "Y": "1.0"
+      },
+      "ProduceDemand": 10
+    },
+    {
+      "Number": 2,
+      "Position": {
+        "X": "10.0",
+        "Y": "11.0"
+      },
+      "ProduceDemand": 12
+    },
+    {
+      "Number": 3,
+      "Position": {
+        "X": "-5.0",
+        "Y": "2.0"
+      },
+      "ProduceDemand": 5
+    }
+  ]
+}

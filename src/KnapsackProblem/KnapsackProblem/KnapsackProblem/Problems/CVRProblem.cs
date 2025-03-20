@@ -1,4 +1,5 @@
-﻿using ProblemSolvers.CommonTypes.GenericData;
+﻿using Newtonsoft.Json;
+using ProblemSolvers.CommonTypes.GenericData;
 using System.Numerics;
 
 namespace ProblemSolvers.Problems
@@ -31,6 +32,13 @@ namespace ProblemSolvers.Problems
             _problemCities = Array.Empty<City>();
         }
 
+        [JsonConstructor]
+        public CVRProblem(int truckCapacity, City[] cities)
+        {
+            _truckCapacity = truckCapacity;
+            _problemCities = cities;
+        }
+
         public void SetupProblem(City[] cities, int truckCapacity)
         {
             _problemCities = new City[cities.Length];
@@ -43,6 +51,14 @@ namespace ProblemSolvers.Problems
             }
 
             _truckCapacity = truckCapacity;
+        }
+
+        public void CalculateDistancesAfterFileLoad()
+        {
+            foreach (City c in _problemCities)
+            {
+                c.CalculateAndSetDistanceToOtherCities(_problemCities);
+            }
         }
 
 
@@ -105,6 +121,7 @@ namespace ProblemSolvers.Problems
             // maybe round down to int
             public Dictionary<int, float> DistancesToOtherCities;
 
+            [JsonConstructor]
             public City(int number, Vector2 position, int produceDemand)
             {
                 Number = number;
