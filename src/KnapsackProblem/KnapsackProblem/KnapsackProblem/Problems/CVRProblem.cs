@@ -1,8 +1,6 @@
-﻿using ProblemSolvers.CommonTypes.GenericData;
+﻿using Newtonsoft.Json;
+using ProblemSolvers.CommonTypes.GenericData;
 using System.Numerics;
-//using System.Text.Json.Serialization;
-using Newtonsoft.Json;
-using ProblemSolvers.DataLoaders;
 
 namespace ProblemSolvers.Problems
 {
