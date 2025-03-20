@@ -2,6 +2,6 @@
 {
     public interface IDataLoader<T>
     {
-        T LoadData(string filePath);
+        public T LoadData(string filePath);
     }
 }

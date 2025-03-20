@@ -1,10 +1,12 @@
 ﻿using ProblemSolvers.Problems;
+//using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace ProblemSolvers.DataLoaders
 {
-    public class CVRPDataLoader : IDataLoader<CVRProblem>
+    public class CVRPJsonDataLoader : IDataLoader<CVRProblem>
     {
-        public CVRPDataLoader()
+        public CVRPJsonDataLoader()
         {
 
         }
@@ -12,7 +14,7 @@ namespace ProblemSolvers.DataLoaders
 
         // data needed -> truck capacity, cities list
         // JSON data is ok, maybe implement different loaders for different inputType
-        CVRProblem IDataLoader<CVRProblem>.LoadData(string filePath)
+        public CVRProblem LoadData(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
             {
@@ -24,9 +26,21 @@ namespace ProblemSolvers.DataLoaders
                 throw new FileNotFoundException($"File {filePath} does not exist.");
             }
 
+            if (!filePath.EndsWith(".json"))
+            {
+                throw new ArgumentException("Wrong file format.");
+            }
+
             var cvrProblem = new CVRProblem();
 
-            return new CVRProblem();
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                var json = sr.ReadToEnd();
+
+                cvrProblem = JsonConvert.DeserializeObject<CVRProblem>(json);
+            }
+
+            return cvrProblem!;
         }
     }
 }

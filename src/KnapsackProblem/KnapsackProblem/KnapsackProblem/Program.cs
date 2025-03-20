@@ -1,5 +1,6 @@
 ﻿using ProblemSolvers.CommonTypes.GAEnums;
 using ProblemSolvers.CommonTypes.GenericData;
+using ProblemSolvers.DataLoaders;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic;
 using ProblemSolvers.Solvers.Genetic.Crossoverers.BinaryCrossoverers;
@@ -20,6 +21,11 @@ public class Program
         // create a problem with methods for Evaluation and for encoded data translation to problem's data
         // setup a solver for given problem
 
+        var dataLoader = new CVRPJsonDataLoader();
+
+        //dataLoader.LoadData(Directory.GetCurrentDirectory() + "..\\..\\..\\TestData\\CVRProblem_T1.json");
+        var problem = dataLoader.LoadData("E:\\repos\\genetic-algorithm-p1\\src\\KnapsackProblem\\KnapsackProblem\\KnapsackProblem\\TestData\\CVRProblem_T1.json");
+        problem.CalculateDistancesAfterFileLoad();
 
         // setup differently
         // RouletteSelector - const, no stuff to change
