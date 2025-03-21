@@ -31,7 +31,6 @@ namespace ProblemSolvers.Solvers.TabuSearch
             {
                 genome[i] = i + 1;
             }
-
             rng.Shuffle(genome);
 
             var tabuGenomeList = new List<int[]>() { genome };

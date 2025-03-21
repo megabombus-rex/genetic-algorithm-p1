@@ -118,7 +118,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 _currentIteration++;
             }
 
-            Console.WriteLine($"Best fitness occured in iteration {_bestCVRPData.Iteration} for: [{string.Join("|", _bestCVRPData.Genome)}] with fitness score: {_bestCVRPData.Fitness}.");
+            Console.WriteLine($"Genetic Algorithm:\nBest fitness occured in iteration {_bestCVRPData.Iteration} for: [{string.Join("|", _bestCVRPData.Genome)}] with fitness score: {_bestCVRPData.Fitness}.");
 
         }
 

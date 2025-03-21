@@ -101,7 +101,7 @@ namespace ProblemSolvers.Solvers.Greedy
             }
 
             var distanceRan = _problem.CalculateFitness(citiesSeenArray);
-            Console.WriteLine($"Best fitness occured for: [{string.Join("|", citiesSeenArray)}] with fitness score: {distanceRan}.");
+            Console.WriteLine($"Greedy Algorithm:\nBest fitness occured for: [{string.Join("|", citiesSeenArray)}] with fitness score: {distanceRan}.");
         }
     }
 }

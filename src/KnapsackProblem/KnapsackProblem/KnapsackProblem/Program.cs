@@ -16,16 +16,11 @@ public class Program
 {
     private static void Main(string[] args)
     {
-        Console.WriteLine("Dum dum dummmmm.");
         // The program is as follows:
         // create a problem with methods for Evaluation and for encoded data translation to problem's data
         // setup a solver for given problem
+        var testDataPath = string.Format("{0}\\{1}", Environment.CurrentDirectory, "..\\..\\..\\TestData");
 
-        var dataLoader = new CVRPJsonDataLoader();
-
-        //dataLoader.LoadData(Directory.GetCurrentDirectory() + "..\\..\\..\\TestData\\CVRProblem_T1.json");
-        var problem = dataLoader.LoadData("E:\\repos\\genetic-algorithm-p1\\src\\KnapsackProblem\\KnapsackProblem\\KnapsackProblem\\TestData\\CVRProblem_T1.json");
-        problem.CalculateDistancesAfterFileLoad();
 
         // setup differently
         // RouletteSelector - const, no stuff to change
@@ -66,23 +61,30 @@ public class Program
         //knapsackGeneticSolver.FindOptimalSolution();
 
         // setup the cVR Problem
-        CVRProblem cvrpOne = new CVRProblem();
-        var cvrpOneCities = new CVRProblem.City[]
-        {
-            new CVRProblem.City(1, new Vector2(15.0f, 12.0f), 5),
-            new CVRProblem.City(2, new Vector2(10.0f, 1.0f), 10),
-            new CVRProblem.City(3, new Vector2(-5.0f, 4.0f), 15),
-            new CVRProblem.City(4, new Vector2(-4.0f, 2.0f), 13),
-            new CVRProblem.City(5, new Vector2(-3.0f, 13.0f), 11),
-            new CVRProblem.City(6, new Vector2(1.5f, 5.0f), 3),
-            new CVRProblem.City(7, new Vector2(0.0f, 6.0f), 4),
-            new CVRProblem.City(8, new Vector2(45.0f, 2.0f), 1),
-            new CVRProblem.City(9, new Vector2(0.0f, 11.0f), 4),
-            new CVRProblem.City(10, new Vector2(0.0f, 32.0f), 4),
-        };
+        //CVRProblem cvrpOne = new CVRProblem();
+        //var cvrpOneCities = new CVRProblem.City[]
+        //{
+        //    new CVRProblem.City(1, new Vector2(15.0f, 12.0f), 5),
+        //    new CVRProblem.City(2, new Vector2(10.0f, 1.0f), 10),
+        //    new CVRProblem.City(3, new Vector2(-5.0f, 4.0f), 15),
+        //    new CVRProblem.City(4, new Vector2(-4.0f, 2.0f), 13),
+        //    new CVRProblem.City(5, new Vector2(-3.0f, 13.0f), 11),
+        //    new CVRProblem.City(6, new Vector2(1.5f, 5.0f), 3),
+        //    new CVRProblem.City(7, new Vector2(0.0f, 6.0f), 4),
+        //    new CVRProblem.City(8, new Vector2(45.0f, 2.0f), 1),
+        //    new CVRProblem.City(9, new Vector2(0.0f, 11.0f), 4),
+        //    new CVRProblem.City(10, new Vector2(0.0f, 32.0f), 4),
+        //};
 
-        var cvrpOneTruckCapacity = 25;
-        cvrpOne.SetupProblem(cvrpOneCities, cvrpOneTruckCapacity);
+        //var cvrpOneTruckCapacity = 25;
+        //cvrpOne.SetupProblem(cvrpOneCities, cvrpOneTruckCapacity);
+
+        var dataLoader = new CVRPJsonDataLoader();
+
+
+        var cvrpOne = dataLoader.LoadData(testDataPath + "\\CVRProblem_T1.json");
+        cvrpOne.CalculateDistancesAfterFileLoad();
+
 
         var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 1000, PopulationSize: 500, CrossoverProbability: 0.7, MutationProbability: 0.01);
         var crossovererCVRP = new OrderedCrossoverer();

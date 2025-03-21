@@ -1,0 +1,101 @@
+{
+  "TruckCapacity": 35,
+  "Cities": [
+    {
+      "Number": 1,
+      "Position": {
+        "X": "1.0",
+        "Y": "1.0"
+      },
+      "ProduceDemand": 10
+    },
+    {
+      "Number": 2,
+      "Position": {
+        "X": "10.0",
+        "Y": "11.0"
+      },
+      "ProduceDemand": 12
+    },
+    {
+      "Number": 3,
+      "Position": {
+        "X": "-5.0",
+        "Y": "2.0"
+      },
+      "ProduceDemand": 5
+    },
+    {
+      "Number": 4,
+      "Position": {
+        "X": "53.0",
+        "Y": "11.0"
+      },
+      "ProduceDemand": 7
+    },
+    {
+      "Number": 5,
+      "Position": {
+        "X": "64.0",
+        "Y": "12.0"
+      },
+      "ProduceDemand": 5
+    },
+    {
+      "Number": 6,
+      "Position": {
+        "X": "-23.0",
+        "Y": "-112.0"
+      },
+      "ProduceDemand": 3
+    },
+    {
+      "Number": 7,
+      "Position": {
+        "X": "-18.3",
+        "Y": "23.5"
+      },
+      "ProduceDemand": 23
+    },
+    {
+      "Number": 8,
+      "Position": {
+        "X": "-50.0",
+        "Y": "22.0"
+      },
+      "ProduceDemand": 11
+    },
+    {
+      "Number": 9,
+      "Position": {
+        "X": "-100.0",
+        "Y": "22.0"
+      },
+      "ProduceDemand": 1
+    },
+    {
+      "Number": 10,
+      "Position": {
+        "X": "71.0",
+        "Y": "10.0"
+      },
+      "ProduceDemand": 14
+    },
+    {
+      "Number": 11,
+      "Position": {
+        "X": "-5.0",
+        "Y": "11.0"
+      },
+      "ProduceDemand": 5
+    },
+    {
+      "Number": 12,
+      "Position": {
+        "X": "-11.0",
+        "Y": "200.0"
+      },
+      "ProduceDemand": 4
+    }
+  ]
+}
