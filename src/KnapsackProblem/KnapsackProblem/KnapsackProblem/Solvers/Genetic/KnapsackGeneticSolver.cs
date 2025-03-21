@@ -9,7 +9,7 @@ namespace ProblemSolvers.Solvers.Genetic
 {
     //  My own implementation based off the information gathered on video by Kie: https://www.youtube.com/watch?v=uQj5UNhCPuo&ab_channel=KieCodes
     //  The information was gathered from Genetic Algorithms: Theory and Applications, Lecture Notes, Third Edition—Winter 2003/2004 by Ulrich Bodenhofer
-    public class KnapsackGeneticSolver : ISolver
+    public class KnapsackGeneticSolver : ISolver<BestKnapsackData>
     {
         private KnapsackProblem _knapsackProblem;
         private readonly GeneticAlgorithmGenericData _geneticAlgorithmData;
@@ -131,7 +131,7 @@ namespace ProblemSolvers.Solvers.Genetic
             throw new NotImplementedException();
         }
 
-        public void FindOptimalSolution()
+        public BestKnapsackData FindOptimalSolution()
         {
             // populate
             CreateInitialPopulation();
@@ -198,7 +198,7 @@ namespace ProblemSolvers.Solvers.Genetic
             }
 
             Console.WriteLine($"Genetic Algorithm:\nBest fitness occured in iteration {_bestKnapsackData.Iteration} for: {string.Join("", _bestKnapsackData.Genome)} with fitness score: {_bestKnapsackData.Fitness}.");
-
+            return _bestKnapsackData;
             // also find best, and average 
         }
     }

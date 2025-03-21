@@ -1,8 +1,9 @@
 ﻿namespace ProblemSolvers.Solvers
 {
-    public interface ISolver
+    public interface ISolver<T>
     {
-        void FindOptimalSolution();
+        // the template is for the best fitness data
+        T FindOptimalSolution();
 
     }
 }

@@ -90,6 +90,7 @@ public class Program
         var crossovererCVRP = new OrderedCrossoverer();
         var mutatorCVRP = new InvertedCombinationMutator();
 
+        // the same amount of Generations as for each genome in genetic algorithm per generation
         var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
 
         var cvrpGeneticSolver = new CVRPGeneticSolver(SelectionType.Roulette, crossovererCVRP, mutatorCVRP, GAdataCVRP, cvrpOne);

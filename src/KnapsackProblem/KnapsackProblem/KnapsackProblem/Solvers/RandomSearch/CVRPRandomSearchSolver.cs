@@ -5,7 +5,7 @@ using ProblemSolvers.Problems;
 namespace ProblemSolvers.Solvers.RandomSearch
 {
     // own implementation
-    public class CVRPRandomSearchSolver : ISolver
+    public class CVRPRandomSearchSolver : ISolver<BestCVRPData>
     {
         private CVRProblem _problem;
         private BestCVRPData _bestCVRPData;
@@ -18,12 +18,12 @@ namespace ProblemSolvers.Solvers.RandomSearch
             _algorithmData = data;
         }
 
-        public void FindOptimalSolution()
+        public BestCVRPData FindOptimalSolution()
         {
             if (_problem.CitiesCount < 1)
             {
                 Console.WriteLine("Empty city list, fitness = 0.");
-                return;
+                return _bestCVRPData;
             }
 
             // create an initial genome
@@ -48,6 +48,7 @@ namespace ProblemSolvers.Solvers.RandomSearch
             }
 
             Console.WriteLine($"Random Search Algorithm:\nBest fitness occured in iteration {_bestCVRPData.Iteration} for: [{string.Join("|", _bestCVRPData.Genome)}] with fitness score: {_bestCVRPData.Fitness}.");
+            return _bestCVRPData;
         }
     }
 }

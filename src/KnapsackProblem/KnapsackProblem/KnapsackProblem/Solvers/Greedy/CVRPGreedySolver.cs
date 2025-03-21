@@ -1,23 +1,26 @@
-﻿using ProblemSolvers.Problems;
+﻿using ProblemSolvers.CommonTypes.BestData;
+using ProblemSolvers.Problems;
 
 namespace ProblemSolvers.Solvers.Greedy
 {
     // The implementation done by me, based off the problem calculation of fitness. Closest possible city -> optimal local solution.
-    public class CVRPGreedySolver : ISolver
+    public class CVRPGreedySolver : ISolver<BestCVRPData>
     {
         private CVRProblem _problem;
+        private BestCVRPData _bestCVRPData;
 
         public CVRPGreedySolver(CVRProblem problem)
         {
             _problem = problem;
+            _bestCVRPData = new BestCVRPData(problem.CitiesCount);
         }
 
-        public void FindOptimalSolution()
+        public BestCVRPData FindOptimalSolution()
         {
             if (_problem.CitiesCount < 1)
             {
                 Console.WriteLine("Empty city list, fitness = 0.");
-                return;
+                return _bestCVRPData;
             }
 
             int[] citiesSeenArray = new int[_problem.CitiesCount];
@@ -102,6 +105,9 @@ namespace ProblemSolvers.Solvers.Greedy
 
             var distanceRan = _problem.CalculateFitness(citiesSeenArray);
             Console.WriteLine($"Greedy Algorithm:\nBest fitness occured for: [{string.Join("|", citiesSeenArray)}] with fitness score: {distanceRan}.");
+            _bestCVRPData.UpdateBestCVRPData(0, distanceRan, citiesSeenArray);
+
+            return _bestCVRPData;
         }
     }
 }

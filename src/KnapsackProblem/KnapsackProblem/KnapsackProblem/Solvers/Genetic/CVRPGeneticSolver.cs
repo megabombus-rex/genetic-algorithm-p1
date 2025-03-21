@@ -9,7 +9,7 @@ using ProblemSolvers.Solvers.Genetic.Selectors;
 namespace ProblemSolvers.Solvers.Genetic
 {
     // own implementation based off KnapsackGeneticSolver
-    public class CVRPGeneticSolver : ISolver
+    public class CVRPGeneticSolver : ISolver<BestCVRPData>
     {
         private readonly SelectionType _selectionType;
         private readonly CombinatoralCrossoverer _crossoverer;
@@ -47,13 +47,13 @@ namespace ProblemSolvers.Solvers.Genetic
         }
 
 
-        public void FindOptimalSolution()
+        public BestCVRPData FindOptimalSolution()
         {
 
             if (_problem.CitiesCount < 1)
             {
                 Console.WriteLine("Empty city list, fitness = 0.");
-                return;
+                return _bestCVRPData;
             }
 
             // Create population
@@ -119,7 +119,7 @@ namespace ProblemSolvers.Solvers.Genetic
             }
 
             Console.WriteLine($"Genetic Algorithm:\nBest fitness occured in iteration {_bestCVRPData.Iteration} for: [{string.Join("|", _bestCVRPData.Genome)}] with fitness score: {_bestCVRPData.Fitness}.");
-
+            return _bestCVRPData;
         }
 
         private void CreateInitialPopulation()
