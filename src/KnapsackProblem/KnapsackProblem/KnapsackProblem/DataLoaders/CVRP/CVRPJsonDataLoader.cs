@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ProblemSolvers.Problems;
 
-namespace ProblemSolvers.DataLoaders
+namespace ProblemSolvers.DataLoaders.CVRP
 {
     public class CVRPJsonDataLoader : IDataLoader<CVRProblem>
     {
@@ -38,6 +38,8 @@ namespace ProblemSolvers.DataLoaders
 
                 cvrProblem = JsonConvert.DeserializeObject<CVRProblem>(json);
             }
+
+            cvrProblem.CalculateDistancesAfterFileLoad();
 
             return cvrProblem!;
         }
