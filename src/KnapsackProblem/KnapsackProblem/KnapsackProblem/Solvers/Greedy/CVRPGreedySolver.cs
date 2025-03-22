@@ -104,8 +104,8 @@ namespace ProblemSolvers.Solvers.Greedy
             }
 
             var distanceRan = _problem.CalculateFitness(citiesSeenArray);
-            Console.WriteLine($"Greedy Algorithm:\nBest fitness occured for: [{string.Join("|", citiesSeenArray)}] with fitness score: {distanceRan}.");
             _bestCVRPData.UpdateBestCVRPData(0, distanceRan, citiesSeenArray);
+            _bestCVRPData.DisplayBestData("Greedy Algorithm");
 
             return _bestCVRPData;
         }

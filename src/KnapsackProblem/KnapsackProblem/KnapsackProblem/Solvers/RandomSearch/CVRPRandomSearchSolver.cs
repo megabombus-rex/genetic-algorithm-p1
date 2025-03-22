@@ -47,7 +47,7 @@ namespace ProblemSolvers.Solvers.RandomSearch
                 }
             }
 
-            Console.WriteLine($"Random Search Algorithm:\nBest fitness occured in iteration {_bestCVRPData.Iteration} for: [{string.Join("|", _bestCVRPData.Genome)}] with fitness score: {_bestCVRPData.Fitness}.");
+            _bestCVRPData.DisplayBestData("Random Search");
             return _bestCVRPData;
         }
     }
