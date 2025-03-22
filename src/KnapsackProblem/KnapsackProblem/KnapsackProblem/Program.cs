@@ -10,6 +10,7 @@ using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 using ProblemSolvers.Solvers.Greedy;
 using ProblemSolvers.Solvers.RandomSearch;
+using ProblemSolvers.Solvers.SimulatedAnnealing;
 using System.Numerics;
 
 public class Program
@@ -82,7 +83,8 @@ public class Program
         var dataLoader = new CVRPJsonDataLoader();
 
 
-        var cvrpOne = dataLoader.LoadData(testDataPath + "\\CVRProblem_T1.json");
+        //var cvrpOne = dataLoader.LoadData(testDataPath + "\\CVRProblem_T1.json");
+        var cvrpOne = dataLoader.LoadData(testDataPath + "\\CVRProblem_T2.json");
         cvrpOne.CalculateDistancesAfterFileLoad();
 
 
@@ -93,12 +95,16 @@ public class Program
         // the same amount of Generations as for each genome in genetic algorithm per generation
         var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
 
+        var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.00001, 0.9);
+
         var cvrpGeneticSolver = new CVRPGeneticSolver(SelectionType.Roulette, crossovererCVRP, mutatorCVRP, GAdataCVRP, cvrpOne);
         var cvrpGreedySolver = new CVRPGreedySolver(cvrpOne);
         var cvrpRandomSolver = new CVRPRandomSearchSolver(cvrpOne, RSdataCVRP);
+        var cvrpAnnealingSolver = new CVRPSimulatedAnnealingSolver(cvrpOne, SAdataCVRP);
 
-        cvrpGeneticSolver.FindOptimalSolution();
-        cvrpGreedySolver.FindOptimalSolution();
-        cvrpRandomSolver.FindOptimalSolution();
+        var restultCVRPGenetic = cvrpGeneticSolver.FindOptimalSolution();
+        var restultCVRPGreed = cvrpGreedySolver.FindOptimalSolution();
+        var restultCVRPRandom = cvrpRandomSolver.FindOptimalSolution();
+        var restultCVRPAnnealing = cvrpAnnealingSolver.FindOptimalSolution();
     }
 }
