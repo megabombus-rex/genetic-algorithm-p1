@@ -105,9 +105,10 @@ namespace ProblemSolvers.Solvers.Greedy
 
             var distanceRan = _problem.CalculateFitness(citiesSeenArray);
             _bestCVRPData.UpdateBestCVRPData(0, distanceRan, citiesSeenArray);
-            _bestCVRPData.DisplayBestData("Greedy Algorithm");
+            //_bestCVRPData.DisplayBestData("Greedy Algorithm");
 
-            return _bestCVRPData;
+            // no need for a clone, just for clean code reasons
+            return _bestCVRPData.Clone();
         }
     }
 }

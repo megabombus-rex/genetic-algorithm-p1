@@ -1,4 +1,6 @@
-﻿namespace ProblemSolvers.CommonTypes.BestData
+﻿using System.Text;
+
+namespace ProblemSolvers.CommonTypes.BestData
 {
     public class BestCVRPData
     {
@@ -12,6 +14,25 @@
             Fitness = double.MaxValue;
         }
 
+        public virtual BestCVRPData Clone()
+        {
+            var clone = new BestCVRPData(Genome.Length);
+            clone.Iteration = Iteration;
+            clone.Fitness = Fitness;
+            Array.Copy(Genome, clone.Genome, this.Genome.Length);
+            return clone;
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < Genome.Length; i++)
+            {
+                Genome[i] = 0;
+            }
+            Fitness = double.MaxValue;
+            Iteration = 0;
+        }
+
         public virtual void UpdateBestCVRPData(int iteration, double fitness, int[] genome)
         {
             Iteration = iteration;
@@ -23,6 +44,19 @@
         {
             Console.WriteLine($"{algorithmUsed}:\nBest fitness occured in iteration {Iteration} for: [{string.Join("|", Genome)}] with fitness score: {Fitness}.");
         }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(Iteration);
+            sb.Append(',');
+            sb.Append(Fitness);
+            sb.Append(",");
+            sb.Append('[' + string.Join("|", Genome) + ']');
+
+            return sb.ToString();
+        }
+
     }
 
     public class BestCVRPDataSimulatedAnnealing : BestCVRPData
@@ -38,6 +72,18 @@
         {
             base.UpdateBestCVRPData(iteration, fitness, genome);
             Temperature = temperature;
+        }
+
+
+        public override BestCVRPData Clone()
+        {
+            var clone = new BestCVRPDataSimulatedAnnealing(Genome.Length);
+            clone.Temperature = Temperature;
+            clone.Fitness = Fitness;
+            clone.Iteration = Iteration;
+            Array.Copy(Genome, clone.Genome, this.Genome.Length);
+
+            return clone;
         }
 
         public override void DisplayBestData(string algorithmUsed)

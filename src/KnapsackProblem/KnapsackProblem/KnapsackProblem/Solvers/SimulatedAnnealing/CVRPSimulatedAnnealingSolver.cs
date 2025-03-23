@@ -6,7 +6,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
 {
     // https://en.wikipedia.org/wiki/Simulated_annealing
     // https://www.geeksforgeeks.org/simulated-annealing/
-    public class CVRPSimulatedAnnealingSolver : ISolver<BestCVRPDataSimulatedAnnealing>
+    public class CVRPSimulatedAnnealingSolver : ISolver<BestCVRPData>
     {
         private CVRProblem _problem;
         private BestCVRPDataSimulatedAnnealing _bestCVRPData;
@@ -19,8 +19,10 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
             _algorithmData = data;
         }
 
-        public BestCVRPDataSimulatedAnnealing FindOptimalSolution()
+        public BestCVRPData FindOptimalSolution()
         {
+            _bestCVRPData.Clear();
+
             if (_problem.CitiesCount < 1)
             {
                 Console.WriteLine("Empty city list, fitness = Max Value.");
@@ -93,9 +95,9 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                 currentTemp *= _algorithmData.Alpha;
             }
 
-            _bestCVRPData.DisplayBestData("Simulated Annealing");
+            //_bestCVRPData.DisplayBestData("Simulated Annealing");
 
-            return _bestCVRPData;
+            return _bestCVRPData.Clone();
         }
 
         private int[] CreateNeighbour(int[] solution, NeighbourCreationAlgorithm creationAlgorithm)

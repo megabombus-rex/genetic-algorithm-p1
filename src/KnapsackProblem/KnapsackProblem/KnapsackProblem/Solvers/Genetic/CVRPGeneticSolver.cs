@@ -49,6 +49,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
         public BestCVRPData FindOptimalSolution()
         {
+            _bestCVRPData.Clear();
 
             if (_problem.CitiesCount < 1)
             {
@@ -68,7 +69,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
             while (_currentIteration < _algorithmData.GenerationsAmount)
             {
-                Console.WriteLine($"Generation {_currentIteration}.");
+                //Console.WriteLine($"Generation {_currentIteration}.");
 
                 // select parents
                 // index keeping the currently selected 'individual' from the next population
@@ -118,8 +119,8 @@ namespace ProblemSolvers.Solvers.Genetic
                 _currentIteration++;
             }
 
-            _bestCVRPData.DisplayBestData("Genetic Algorithm");
-            return _bestCVRPData;
+            //_bestCVRPData.DisplayBestData("Genetic Algorithm");
+            return _bestCVRPData.Clone();
         }
 
         private void CreateInitialPopulation()

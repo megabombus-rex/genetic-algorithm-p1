@@ -20,6 +20,8 @@ namespace ProblemSolvers.Solvers.RandomSearch
 
         public BestCVRPData FindOptimalSolution()
         {
+            _bestCVRPData.Clear();
+
             if (_problem.CitiesCount < 1)
             {
                 Console.WriteLine("Empty city list, fitness = 0.");
@@ -47,8 +49,8 @@ namespace ProblemSolvers.Solvers.RandomSearch
                 }
             }
 
-            _bestCVRPData.DisplayBestData("Random Search");
-            return _bestCVRPData;
+            //_bestCVRPData.DisplayBestData("Random Search");
+            return _bestCVRPData.Clone();
         }
     }
 }
