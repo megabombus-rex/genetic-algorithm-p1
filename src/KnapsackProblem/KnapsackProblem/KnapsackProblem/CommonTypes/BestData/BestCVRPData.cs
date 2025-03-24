@@ -37,7 +37,8 @@ namespace ProblemSolvers.CommonTypes.BestData
         {
             Iteration = iteration;
             Fitness = fitness;
-            Array.Copy(genome, Genome, Genome.Length);
+            //Array.Copy(genome, Genome, Genome.Length);
+            Buffer.BlockCopy(genome, 0, Genome, 0, Genome.Length * sizeof(int));
         }
 
         public virtual void DisplayBestData(string algorithmUsed)

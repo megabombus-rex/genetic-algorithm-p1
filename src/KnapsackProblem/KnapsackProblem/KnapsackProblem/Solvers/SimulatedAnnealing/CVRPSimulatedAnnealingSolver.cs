@@ -86,7 +86,8 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
 
                     if (probability > rng.NextDouble())
                     {
-                        Array.Copy(neighbour, solution, neighbour.Length);
+                        Buffer.BlockCopy(neighbour, 0, solution, 0, solution.Length * sizeof(int));
+                        //Array.Copy(neighbour, solution, neighbour.Length);
                         solutionChanged = true;
                     }
                     countOfCalls++;

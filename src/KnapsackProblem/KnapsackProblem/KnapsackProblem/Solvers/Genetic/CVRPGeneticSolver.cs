@@ -88,17 +88,23 @@ namespace ProblemSolvers.Solvers.Genetic
 
                         var crossoveredIndividual = _crossoverer.CrossoverParents(_populationEncoded[parent1Index], _populationEncoded[parent2Index]);
 
-                        for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
-                        {
-                            _populationEncodedNextGen[nextPopulationIndex][j] = crossoveredIndividual[j];
-                        }
+                        //Array.Copy(crossoveredIndividual, _populationEncodedNextGen[nextPopulationIndex], crossoveredIndividual.Length);
+                        Buffer.BlockCopy(crossoveredIndividual, 0, _populationEncodedNextGen[parent1Index], 0, crossoveredIndividual.Length * sizeof(int));
+
+                        //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
+                        //{
+                        //    _populationEncodedNextGen[nextPopulationIndex][j] = crossoveredIndividual[j];
+                        //}
                     }
                     else
                     {
-                        for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
-                        {
-                            _populationEncodedNextGen[nextPopulationIndex][j] = _populationEncoded[parent1Index][j];
-                        }
+                        //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
+                        //{
+                        //    _populationEncodedNextGen[nextPopulationIndex][j] = _populationEncoded[parent1Index][j];
+                        //}
+                        //Array.Copy(_populationEncoded[nextPopulationIndex], _populationEncodedNextGen[parent1Index], _populationEncoded[parent1Index].Length);
+
+                        Buffer.BlockCopy(_populationEncoded[nextPopulationIndex], 0, _populationEncodedNextGen[parent1Index], 0, _populationEncodedNextGen[parent1Index].Length * sizeof(int));
                     }
 
                     // mutate
