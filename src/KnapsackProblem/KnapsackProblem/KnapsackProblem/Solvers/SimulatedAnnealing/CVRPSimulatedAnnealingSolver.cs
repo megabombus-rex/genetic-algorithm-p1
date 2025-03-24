@@ -41,6 +41,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
 
             // implement base solution s
             var solution = new int[_problem.CitiesCount];
+            var countOfCalls = 0;
 
             var rng = new Random();
             for (int i = 0; i < solution.Length; i++)
@@ -88,6 +89,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                         Array.Copy(neighbour, solution, neighbour.Length);
                         solutionChanged = true;
                     }
+                    countOfCalls++;
                 }
 
 
@@ -96,6 +98,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
             }
 
             //_bestCVRPData.DisplayBestData("Simulated Annealing");
+            Console.WriteLine($"SA iterations sum through temperature changes {countOfCalls}");
 
             return _bestCVRPData.Clone();
         }

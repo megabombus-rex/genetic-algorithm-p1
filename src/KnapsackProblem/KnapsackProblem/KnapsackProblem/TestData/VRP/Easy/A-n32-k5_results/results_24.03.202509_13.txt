@@ -1,0 +1,24 @@
+
+Genetic algorithm data: Population size: 100. Generations amount: 100. Crossover probability 0,7. Mutation probability 0,1.
+Random Search algorithm data: Population size: 10000.
+Simulated Annealing algorithm data: Initial temperature: 1. Minimal temperature: 0,0001. Iterations per T change: 100. Alpha: 0,9.
+Genetic Algorithm:
+Mean fitness: 1700,0041105985642.
+Best fitness: 1627,2543959617615.
+Number of runs the algorithm had: 10.
+The algorithm runtime mean: 00:00:00.0976522
+Random Search Algorithm:
+Mean fitness: 1692,308692908287.
+Best fitness: 1598,1403152942657.
+Number of runs the algorithm had: 10.
+The algorithm runtime mean: 00:00:00.0228587
+Simulated Annealing Algorithm:
+Mean fitness: 1104,8754414796829.
+Best fitness: 1076,1471955776215.
+Number of runs the algorithm had: 10.
+The algorithm runtime mean: 00:00:00.0085302
+Greedy Algorithm:
+Mean fitness: 1168,653188943863.
+Best fitness: 1168,653188943863.
+Number of runs the algorithm had: 1.
+The algorithm runtime mean: 00:00:00.0116247

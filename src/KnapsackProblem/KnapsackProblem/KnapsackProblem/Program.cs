@@ -42,7 +42,7 @@ public class Program
         var crossovererCVRP = new OrderedCrossoverer();
         var mutatorCVRP = new InvertedCombinationMutator();
 
-        var runner = new CVRProblemRunner(cvrpOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5);
+        var runner = new CVRProblemRunner(cvrpOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFile, 10);
 
         runner.RunProblem();
         
