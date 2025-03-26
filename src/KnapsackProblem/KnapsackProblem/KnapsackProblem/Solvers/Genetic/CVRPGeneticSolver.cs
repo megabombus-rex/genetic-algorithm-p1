@@ -88,8 +88,8 @@ namespace ProblemSolvers.Solvers.Genetic
 
                         var crossoveredIndividual = _crossoverer.CrossoverParents(_populationEncoded[parent1Index], _populationEncoded[parent2Index]);
 
-                        //Array.Copy(crossoveredIndividual, _populationEncodedNextGen[nextPopulationIndex], crossoveredIndividual.Length);
-                        Buffer.BlockCopy(crossoveredIndividual, 0, _populationEncodedNextGen[parent1Index], 0, crossoveredIndividual.Length * sizeof(int));
+                        Array.Copy(crossoveredIndividual, _populationEncodedNextGen[nextPopulationIndex], crossoveredIndividual.Length);
+                        //Buffer.BlockCopy(crossoveredIndividual, 0, _populationEncodedNextGen[nextPopulationIndex], 0, crossoveredIndividual.Length * sizeof(int));
 
                         //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
                         //{
@@ -102,9 +102,9 @@ namespace ProblemSolvers.Solvers.Genetic
                         //{
                         //    _populationEncodedNextGen[nextPopulationIndex][j] = _populationEncoded[parent1Index][j];
                         //}
-                        //Array.Copy(_populationEncoded[nextPopulationIndex], _populationEncodedNextGen[parent1Index], _populationEncoded[parent1Index].Length);
+                        Array.Copy(_populationEncoded[nextPopulationIndex], _populationEncodedNextGen[parent1Index], _populationEncoded[parent1Index].Length);
 
-                        Buffer.BlockCopy(_populationEncoded[nextPopulationIndex], 0, _populationEncodedNextGen[parent1Index], 0, _populationEncodedNextGen[parent1Index].Length * sizeof(int));
+                        //Buffer.BlockCopy(_populationEncoded[parent1Index], 0, _populationEncodedNextGen[nextPopulationIndex], 0, _populationEncodedNextGen[parent1Index].Length * sizeof(int));
                     }
 
                     // mutate
@@ -152,7 +152,7 @@ namespace ProblemSolvers.Solvers.Genetic
 
         private void EvaluatePopulation()
         {
-            var bestFitnessPerPopulation = 0.0;
+            var bestFitnessPerPopulation = double.MaxValue;
 
             for (int i = 0; i < _populationEncoded.Length; i++)
             {
@@ -165,7 +165,7 @@ namespace ProblemSolvers.Solvers.Genetic
                     _bestCVRPData.UpdateBestCVRPData(_currentIteration, calculatedFitness, _populationEncoded[i]);
                 }
 
-                if (calculatedFitness > bestFitnessPerPopulation)
+                if (calculatedFitness < bestFitnessPerPopulation)
                 {
                     bestFitnessPerPopulation = calculatedFitness;
                 }
@@ -173,7 +173,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 _sumOfFitness += calculatedFitness;
             }
 
-            //Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
+            Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
         }
 
         private int SelectParentIndexForNextPopulation(SelectionType selectionType)

@@ -74,8 +74,11 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
 
             // find highest fitness of selected possible parents
             var lowestFitnessIndex = contestantGenomesIndexes[0];
-            for (int i = 1; i > TournamentContestants; i++)
+            //Console.WriteLine($"Contestant {contestantGenomesIndexes[0]} fitness: {populationFitnessScores[lowestFitnessIndex]}");
+
+            for (int i = 1; i < TournamentContestants; i++)
             {
+                //Console.WriteLine($"Contestant {contestantGenomesIndexes[i]} fitness: {populationFitnessScores[lowestFitnessIndex]}");
                 if (populationFitnessScores[lowestFitnessIndex] > populationFitnessScores[contestantGenomesIndexes[i]])
                 {
                     lowestFitnessIndex = contestantGenomesIndexes[i];
@@ -85,11 +88,5 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
             return lowestFitnessIndex;
         }
 
-
-        public static int SelectParentIndexByTournamentLessIsBetter(int[][] populationEncoded, int[] populationFitnessScores)
-        {
-            // not implemented
-            return 0;
-        }
     }
 }
