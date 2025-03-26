@@ -89,8 +89,10 @@ namespace ProblemSolvers.TestData.ProblemRunners
                 timespanSA += DateTime.UtcNow - runtime;
             }
 
+            // mean, best, worst calculation
             var sumOfFitnessesGen = 0.0;
             var bestFitnessGen = double.MaxValue;
+            var worstFitnessGen = 0.0;
 
             foreach (var genSol in geneticSolutions)
             {
@@ -99,12 +101,27 @@ namespace ProblemSolvers.TestData.ProblemRunners
                 {
                     bestFitnessGen = genSol.Fitness;
                 }
+                if (genSol.Fitness > worstFitnessGen)
+                {
+                    worstFitnessGen = genSol.Fitness;
+                }
             }
             var meanFitnessGen = sumOfFitnessesGen / (double)geneticSolutions.Count;
             var meanTimespanGen = timespanGen / geneticSolutions.Count;
 
+            // std deviation calculation
+            var stdDevSumGen = 0.0;
+            foreach (var genSol in geneticSolutions)
+            {
+                var root = genSol.Fitness - meanFitnessGen;
+                stdDevSumGen += root * root;
+            }
+            var stdDevGen = Math.Sqrt(stdDevSumGen / geneticSolutions.Count);
+
+            // mean, best, worst calculation
             var sumOfFitnessesRan = 0.0;
             var bestFitnessRan = double.MaxValue;
+            var worstFitnessRan = 0.0;
 
             foreach (var ranSol in randomSolutions)
             {
@@ -113,12 +130,27 @@ namespace ProblemSolvers.TestData.ProblemRunners
                 {
                     bestFitnessRan = ranSol.Fitness;
                 }
+                if (ranSol.Fitness > worstFitnessRan)
+                {
+                    worstFitnessRan = ranSol.Fitness;
+                }
             }
             var meanFitnessRan = sumOfFitnessesRan / (double)randomSolutions.Count;
-            var meanTimespanRan = timespanRan / geneticSolutions.Count;
+            var meanTimespanRan = timespanRan / randomSolutions.Count;
 
+            // std deviation calculation
+            var stdDevSumRan = 0.0;
+            foreach (var ranSol in randomSolutions)
+            {
+                var root = ranSol.Fitness - meanFitnessRan;
+                stdDevSumRan += root * root;
+            }
+            var stdDevRan = Math.Sqrt(stdDevSumRan / randomSolutions.Count);
+
+            // mean, best, worst calculation
             var sumOfFitnessesSA = 0.0;
             var bestFitnessSA = double.MaxValue;
+            var worstFitnessSA = 0.0;
 
             foreach (var saSol in annealingSolutions)
             {
@@ -127,18 +159,33 @@ namespace ProblemSolvers.TestData.ProblemRunners
                 {
                     bestFitnessSA = saSol.Fitness;
                 }
+                if (saSol.Fitness > worstFitnessSA)
+                {
+                    worstFitnessSA = saSol.Fitness;
+                }
             }
             var meanFitnessSA = sumOfFitnessesSA / (double)annealingSolutions.Count;
-            var meanTimespanSA = timespanSA / geneticSolutions.Count;
+            var meanTimespanSA = timespanSA / annealingSolutions.Count;
 
-            var genResults = ShowResults(meanFitnessGen, bestFitnessGen, _iterationCount, "Genetic Algorithm", meanTimespanGen);
-            var ranResults = ShowResults(meanFitnessRan, bestFitnessRan, _iterationCount, "Random Search Algorithm", meanTimespanRan);
-            var SAResults = ShowResults(meanFitnessSA, bestFitnessSA, _iterationCount, "Simulated Annealing Algorithm", meanTimespanSA);
-            var greedResults = ShowResults(resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, 1, "Greedy Algorithm", timespanGreed);
+            // std deviation calculation
+            var stdDevSumSA = 0.0;
+            foreach (var saSol in annealingSolutions)
+            {
+                var root = saSol.Fitness - meanFitnessSA;
+                stdDevSumSA += root * root;
+            }
+            var stdDevSA = Math.Sqrt(stdDevSumSA / annealingSolutions.Count);
+
+            // results writing
+            var genResults = ShowResults(meanFitnessGen, bestFitnessGen, worstFitnessGen, stdDevGen, _iterationCount, "Genetic Algorithm", meanTimespanGen);
+            var ranResults = ShowResults(meanFitnessRan, bestFitnessRan, worstFitnessRan, stdDevRan, _iterationCount, "Random Search Algorithm", meanTimespanRan);
+            var SAResults = ShowResults(meanFitnessSA, bestFitnessSA, worstFitnessSA, stdDevSA, _iterationCount, "Simulated Annealing Algorithm", meanTimespanSA);
+            var greedResults = ShowResults(resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, 0.0, 1, "Greedy Algorithm", timespanGreed);
 
             var now = DateTime.UtcNow;
             var date = (now.ToShortDateString() + now.ToShortTimeString()).Replace(':', '_').Replace(' ', '_');
-            var filePath = $"{Path.GetDirectoryName(_problemTestCasePath)}\\{Path.GetFileNameWithoutExtension(_problemTestCasePath)}_results";
+            var fileWithoutExt = Path.GetFileNameWithoutExtension(_problemTestCasePath);
+            var filePath = $"{Path.GetDirectoryName(_problemTestCasePath)}\\{fileWithoutExt}_results";
             (new DirectoryInfo(Path.GetFullPath(filePath))).Create();
             var filename = $"{filePath}\\results_{date}.txt";
             var gaData = $"Genetic algorithm data: Population size: {_GAData.PopulationSize}. Generations amount: {_GAData.GenerationsAmount}. Crossover probability {_GAData.CrossoverProbability}. Mutation probability {_GAData.MutationProbability}.";
@@ -147,21 +194,22 @@ namespace ProblemSolvers.TestData.ProblemRunners
 
             var data = new List<string>() { gaData, ranData, saData, genResults, ranResults, SAResults, greedResults };
 
-            SaveFile(filename, data);
+            SaveFile(filename, data, fileWithoutExt);
         }
 
-        private string ShowResults(double mean, double best, int iterationCount, string algorithmSelected, TimeSpan runtimeMean)
+        private string ShowResults(double mean, double best, double worst, double stdDev, int iterationCount, string algorithmSelected, TimeSpan runtimeMean)
         {
-            var message = algorithmSelected + $":\nMean fitness: {mean}.\nBest fitness: {best}.\nNumber of runs the algorithm had: {iterationCount}.\nThe algorithm runtime mean: {runtimeMean}";
+            var message = algorithmSelected + $":\nMean fitness: {mean}.\nBest fitness: {best}.\nWorst fitness: {worst}.\nStandard deviation: {stdDev}.\nNumber of runs the algorithm had: {iterationCount}.\nThe algorithm runtime mean: {runtimeMean}";
             Console.WriteLine(message);
             return message;
         }
 
-        private void SaveFile(string filename, List<string> linesOfData)
+        private void SaveFile(string filename, List<string> linesOfData, string problemTitle)
         {
             using StreamWriter sw = new StreamWriter(filename, true);
 
             sw.WriteLine();
+            sw.WriteLine($"Problem: {problemTitle}");
 
             foreach (var line in linesOfData)
             {
