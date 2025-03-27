@@ -68,25 +68,25 @@ namespace ProblemSolvers.TestData.ProblemRunners
             for (int i = 0; i < _iterationCount; i++)
             {
                 var runtime = DateTime.UtcNow;
-                var resultCVRPGenetic = _geneticSolver.FindOptimalSolution();    
-                geneticSolutions.Add(resultCVRPGenetic);
+                var resultCVRPGenetic = _geneticSolver.FindOptimalSolution();
                 timespanGen += DateTime.UtcNow - runtime;
+                geneticSolutions.Add(resultCVRPGenetic);
             }
 
             for (int i = 0; i < _iterationCount; i++)
             {
                 var runtime = DateTime.UtcNow;
                 var resultCVRPRandom = _randomSearchSolver.FindOptimalSolution();
-                randomSolutions.Add(resultCVRPRandom);
                 timespanRan += DateTime.UtcNow - runtime;
+                randomSolutions.Add(resultCVRPRandom);
             }
 
             for (int i = 0; i < _iterationCount; i++)
             {
                 var runtime = DateTime.UtcNow;
                 var resultCVRPAnnealing = _annealingSolver.FindOptimalSolution();
-                annealingSolutions.Add(resultCVRPAnnealing as BestCVRPDataSimulatedAnnealing);
                 timespanSA += DateTime.UtcNow - runtime;
+                annealingSolutions.Add(resultCVRPAnnealing as BestCVRPDataSimulatedAnnealing);
             }
 
             // mean, best, worst calculation

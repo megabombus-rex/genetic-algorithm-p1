@@ -173,7 +173,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 _sumOfFitness += calculatedFitness;
             }
 
-            Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
+            //Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
         }
 
         private int SelectParentIndexForNextPopulation(SelectionType selectionType)
