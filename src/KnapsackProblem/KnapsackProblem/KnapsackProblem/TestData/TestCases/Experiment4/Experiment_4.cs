@@ -28,21 +28,25 @@ namespace ProblemSolvers.TestData.TestCases.Experiment4
             IDataLoader<CVRProblem> dataLoader;
 
             var sourceFileEasyAn32k5 = testDataPath + "\\VRP\\Easy\\A-n32-k5.vrp";
+            var sourceFileEasyAn60k9 = testDataPath + "\\VRP\\Hard\\A-n60-k9.vrp";
             dataLoader = new CVRPvrpDataLoader();
             var cvrpEasyOne = dataLoader.LoadData(sourceFileEasyAn32k5);
+            var cvrpHardOne = dataLoader.LoadData(sourceFileEasyAn60k9);
 
             // setup algorithm generic data
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 100, PopulationSize: 200, CrossoverProbability: 0.7, MutationProbability: 0.1);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 1000, CrossoverProbability: 0.8, MutationProbability: 0.05);
             // the same amount of Generations as for each genome in genetic algorithm per generation
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
-            var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.9);
+            var SAdataCVRP = new SimulatedAnnealingGenericData(50, 1.0, 0.0001, 0.9);
 
             // setup the solver
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
             var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10);
+            var runner2 = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn60k9, 10);
             runner.RunProblem();
+            runner2.RunProblem();
 
         }
     }

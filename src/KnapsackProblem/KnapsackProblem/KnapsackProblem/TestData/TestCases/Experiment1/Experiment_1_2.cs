@@ -15,6 +15,8 @@ namespace ProblemSolvers.TestData.TestCases.Experiment1
     {
         public void RunExperiment()
         {
+            var expStart = DateTime.UtcNow; 
+
             // The program is as follows:
             // create a problem with methods for Evaluation and for encoded data translation to problem's data
             // setup a solver for given problem
@@ -46,7 +48,7 @@ namespace ProblemSolvers.TestData.TestCases.Experiment1
             var cvrpI7 = dataLoader.LoadData(sourceFileI7);
 
             // setup algorithm generic data - the best
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 1000, CrossoverProbability: 0.8, MutationProbability: 0.05);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 5000, CrossoverProbability: 0.8, MutationProbability: 0.05);
             // the same amount of Generations as for each genome in genetic algorithm per generation - it does not matter for the RS
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
             var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.9);
@@ -55,20 +57,43 @@ namespace ProblemSolvers.TestData.TestCases.Experiment1
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
-            var runnerI1 = new CVRProblemRunner(cvrpI1, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI1, 10);
+            var runnerI1 = new CVRProblemRunner(cvrpI1, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI1, 10);
+            var runnerI2 = new CVRProblemRunner(cvrpI2, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI2, 10);
+            var runnerI3 = new CVRProblemRunner(cvrpI3, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI3, 10);
+            var runnerI4 = new CVRProblemRunner(cvrpI4, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI4, 10);
+            var runnerI5 = new CVRProblemRunner(cvrpI5, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI5, 10);
+            var runnerI6 = new CVRProblemRunner(cvrpI6, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI6, 10);
+            var runnerI7 = new CVRProblemRunner(cvrpI7, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 10, sourceFileI7, 10);
+            var time = DateTime.UtcNow;
             runnerI1.RunProblem();
-            var runnerI2 = new CVRProblemRunner(cvrpI2, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI2, 10);
+            var runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 1 ran for: {runtime.TotalMilliseconds}");
+
             runnerI2.RunProblem();
-            var runnerI3 = new CVRProblemRunner(cvrpI3, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI3, 10);
+            runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 2 ran for: {runtime.TotalMilliseconds}");
+
             runnerI3.RunProblem();
-            var runnerI4 = new CVRProblemRunner(cvrpI4, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI4, 10);
+            runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 3 ran for: {runtime.TotalMilliseconds}");
+
             runnerI4.RunProblem();
-            var runnerI5 = new CVRProblemRunner(cvrpI5, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI5, 10);
+            runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 4 ran for: {runtime.TotalMilliseconds}");
+
             runnerI5.RunProblem();
-            var runnerI6 = new CVRProblemRunner(cvrpI6, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI6, 10);
+            runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 5 ran for: {runtime.TotalMilliseconds}");
+
             runnerI6.RunProblem();
-            var runnerI7 = new CVRProblemRunner(cvrpI7, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI7, 10);
+            runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 6 ran for: {runtime.TotalMilliseconds}");
+
             runnerI7.RunProblem();
+            runtime = DateTime.UtcNow - time;
+            Console.WriteLine($"Runner 7 ran for: {runtime.TotalMilliseconds}");
+
+            Console.WriteLine($"Experiment 1.2 ran for {(DateTime.UtcNow - expStart).TotalMilliseconds}");
         }
     }
 }
