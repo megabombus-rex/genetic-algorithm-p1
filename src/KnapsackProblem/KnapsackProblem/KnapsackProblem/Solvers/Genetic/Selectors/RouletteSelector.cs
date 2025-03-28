@@ -24,17 +24,19 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
             int i;
             var invertedSum = 0.0;
 
+            // bigger fitness -> lesser inversion
+            // 5, 10, 20 -> 0.2 + 0.1 + 0.05 = 0.35
             for (i = 0; i < populationFitnessScores.Length; i++)
             {
-                invertedSum += (1.0 / (double)populationFitnessScores[i]);
+                invertedSum += (1.0 / populationFitnessScores[i]);
             }
 
             var randomVal = new Random().RandomDouble(0.0, invertedSum);
-            double currentFitnessSum = 0;
+            double currentFitnessSum = 0.0;
 
             for (i = 0; i < populationFitnessScores.Length; i++)
             {
-                currentFitnessSum += (1.0 / (double)populationFitnessScores[i]);
+                currentFitnessSum += (1.0 / populationFitnessScores[i]);
                 if (currentFitnessSum > randomVal)
                 {
                     return i;

@@ -130,18 +130,18 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                 int zeroPositionElement = neighbour[0];
                 for (int i = 1; i < neighbour.Length; i++)
                 {
-                    neighbour[i] = neighbour[i - 1];
+                    neighbour[i - 1] = neighbour[i];
                 }
                 neighbour[neighbour.Length - 1] = zeroPositionElement;
                 return neighbour;
             }
 
             int lastPositionElement = neighbour[neighbour.Length - 1];
-            for (int i = neighbour.Length - 2; i > 0; i++)
+            for (int i = neighbour.Length - 2; i > -1; i--)
             {
                 neighbour[i + 1] = neighbour[i];
             }
-            neighbour[neighbour.Length - 1] = lastPositionElement;
+            neighbour[0] = lastPositionElement;
             return neighbour;
         }
 
