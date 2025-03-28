@@ -34,7 +34,7 @@ namespace ProblemSolvers.TestData.TestCases.Experiment4
             var cvrpHardOne = dataLoader.LoadData(sourceFileEasyAn60k9);
 
             // setup algorithm generic data
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 1000, CrossoverProbability: 0.8, MutationProbability: 0.05);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 1000, PopulationSize: 5000, CrossoverProbability: 1.1, MutationProbability: 1.05);
             // the same amount of Generations as for each genome in genetic algorithm per generation
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
             var SAdataCVRP = new SimulatedAnnealingGenericData(50, 1.0, 0.0001, 0.9);

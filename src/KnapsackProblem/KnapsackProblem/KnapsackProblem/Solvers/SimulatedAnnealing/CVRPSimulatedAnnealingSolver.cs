@@ -11,12 +11,14 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
         private CVRProblem _problem;
         private BestCVRPDataSimulatedAnnealing _bestCVRPData;
         private SimulatedAnnealingGenericData _algorithmData;
+        private int _evaluationCount;
 
         public CVRPSimulatedAnnealingSolver(CVRProblem problem, SimulatedAnnealingGenericData data)
         {
             _problem = problem;
             _bestCVRPData = new BestCVRPDataSimulatedAnnealing(problem.CitiesCount);
             _algorithmData = data;
+            _evaluationCount = 0;
         }
 
         public BestCVRPData FindOptimalSolution()
@@ -50,6 +52,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
             }
             rng.Shuffle(solution);
             var initEval = _problem.CalculateFitness(solution);
+            _evaluationCount++;
 
             _bestCVRPData.UpdateBestCVRPData(0, initEval, solution);
 
@@ -61,6 +64,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
             // to keep the solution fitness from recalculation
             var solutionChanged = false;
             var solutionFitness = _problem.CalculateFitness(solution);
+            _evaluationCount++;
 
             while (currentTemp > minTemp)
             {
@@ -73,9 +77,11 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                     if (solutionChanged)
                     {
                         solutionFitness = _problem.CalculateFitness(solution);
+                        _evaluationCount++;
                         solutionChanged = false;
                     }
                     var neighbourFitness = _problem.CalculateFitness(neighbour);
+                    _evaluationCount++;
 
                     if (_bestCVRPData.Fitness > neighbourFitness)
                     {
@@ -100,7 +106,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
 
             //_bestCVRPData.DisplayBestData("Simulated Annealing");
             Console.WriteLine($"SA iterations sum through temperature changes {countOfCalls}");
-
+            Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");
             return _bestCVRPData.Clone();
         }
 

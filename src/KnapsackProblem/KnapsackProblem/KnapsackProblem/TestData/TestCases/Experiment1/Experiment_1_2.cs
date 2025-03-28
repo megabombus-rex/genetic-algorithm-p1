@@ -48,7 +48,7 @@ namespace ProblemSolvers.TestData.TestCases.Experiment1
             var cvrpI7 = dataLoader.LoadData(sourceFileI7);
 
             // setup algorithm generic data - the best
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 5000, CrossoverProbability: 0.8, MutationProbability: 0.05);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 5000, CrossoverProbability: 0.9, MutationProbability: 0.1);
             // the same amount of Generations as for each genome in genetic algorithm per generation - it does not matter for the RS
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
             var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.9);
@@ -69,26 +69,32 @@ namespace ProblemSolvers.TestData.TestCases.Experiment1
             var runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 1 ran for: {runtime.TotalMilliseconds}");
 
+            time = DateTime.UtcNow;
             runnerI2.RunProblem();
             runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 2 ran for: {runtime.TotalMilliseconds}");
 
+            time = DateTime.UtcNow;
             runnerI3.RunProblem();
             runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 3 ran for: {runtime.TotalMilliseconds}");
 
+            time = DateTime.UtcNow;
             runnerI4.RunProblem();
             runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 4 ran for: {runtime.TotalMilliseconds}");
 
+            time = DateTime.UtcNow;
             runnerI5.RunProblem();
             runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 5 ran for: {runtime.TotalMilliseconds}");
 
+            time = DateTime.UtcNow;
             runnerI6.RunProblem();
             runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 6 ran for: {runtime.TotalMilliseconds}");
 
+            time = DateTime.UtcNow;
             runnerI7.RunProblem();
             runtime = DateTime.UtcNow - time;
             Console.WriteLine($"Runner 7 ran for: {runtime.TotalMilliseconds}");

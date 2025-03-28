@@ -5,6 +5,7 @@ using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Crossoverers.CombinatoralCrossoverers;
 using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
+using System.Numerics;
 
 namespace ProblemSolvers.Solvers.Genetic
 {
@@ -14,6 +15,8 @@ namespace ProblemSolvers.Solvers.Genetic
         private readonly SelectionType _selectionType;
         private readonly CombinatoralCrossoverer _crossoverer;
         private readonly CombinatoralMutator _mutator;
+        private int _evaluationCount;
+
 
         private readonly GeneticAlgorithmGenericData _algorithmData;
 
@@ -42,6 +45,7 @@ namespace ProblemSolvers.Solvers.Genetic
             _populationFitnessScores = new double[data.PopulationSize];
             _sumOfFitness = 0;
 
+            _evaluationCount = 0;
             _currentIteration = 0;
             _bestCVRPData = new BestCVRPData(_problem.CitiesCount);
         }
@@ -125,6 +129,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 _currentIteration++;
             }
 
+            Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");
             //_bestCVRPData.DisplayBestData("Genetic Algorithm");
             return _bestCVRPData.Clone();
         }
@@ -157,6 +162,7 @@ namespace ProblemSolvers.Solvers.Genetic
             for (int i = 0; i < _populationEncoded.Length; i++)
             {
                 var calculatedFitness = _problem.CalculateFitness(_populationEncoded[i]);
+                _evaluationCount++;
                 _populationFitnessScores[i] = calculatedFitness;
 
                 // less is better
@@ -173,7 +179,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 _sumOfFitness += calculatedFitness;
             }
 
-            //Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
+            Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
         }
 
         private int SelectParentIndexForNextPopulation(SelectionType selectionType)

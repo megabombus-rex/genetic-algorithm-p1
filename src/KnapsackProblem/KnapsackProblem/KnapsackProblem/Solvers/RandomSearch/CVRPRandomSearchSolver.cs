@@ -10,12 +10,14 @@ namespace ProblemSolvers.Solvers.RandomSearch
         private CVRProblem _problem;
         private BestCVRPData _bestCVRPData;
         private RandomSearchGenericData _algorithmData;
+        private int _evaluationCount;
 
         public CVRPRandomSearchSolver(CVRProblem problem, RandomSearchGenericData data)
         {
             _problem = problem;
             _bestCVRPData = new BestCVRPData(problem.CitiesCount);
             _algorithmData = data;
+            _evaluationCount = 0;
         }
 
         public BestCVRPData FindOptimalSolution()
@@ -42,6 +44,7 @@ namespace ProblemSolvers.Solvers.RandomSearch
             {
                 rng.Shuffle(genome);
                 var fitness = _problem.CalculateFitness(genome);
+                _evaluationCount++;
 
                 if (fitness < _bestCVRPData.Fitness)
                 {
@@ -49,6 +52,7 @@ namespace ProblemSolvers.Solvers.RandomSearch
                 }
             }
 
+            Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");
             //_bestCVRPData.DisplayBestData("Random Search");
             return _bestCVRPData.Clone();
         }

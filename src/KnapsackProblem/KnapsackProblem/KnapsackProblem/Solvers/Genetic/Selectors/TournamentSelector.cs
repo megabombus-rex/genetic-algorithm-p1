@@ -4,7 +4,25 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
 {
     public static class TournamentSelector
     {
-        public static int TournamentContestants = 4;
+        private static int[] _contestantGenomesIndexes;
+        private static int _tournamentContestants;
+
+        static TournamentSelector()
+        {
+            _contestantGenomesIndexes = Array.Empty<int>();
+        }
+
+        public static int TournamentContestants { 
+            get 
+            { 
+                return _tournamentContestants;  
+            } 
+            set 
+            {
+                _tournamentContestants = value;
+                _contestantGenomesIndexes = new int[_tournamentContestants];
+            } 
+        }
 
 
         // different array types for numbers only
@@ -29,21 +47,21 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
             }
 
             var rng = new Random();
-            var contestantGenomesIndexes = new int[TournamentContestants];
+            //_contestantGenomesIndexes = new int[TournamentContestants];
 
             // randomly select indexes from the population
             for (int i = 0; i < TournamentContestants; i++)
             {
-                contestantGenomesIndexes[i] = rng.Next(0, populationEncoded.Length);
+                _contestantGenomesIndexes[i] = rng.Next(0, populationEncoded.Length);
             }
 
             // find highest fitness of selected possible parents
-            var highestFitnessIndex = contestantGenomesIndexes[0];
+            var highestFitnessIndex = _contestantGenomesIndexes[0];
             for (int i = 1; i < TournamentContestants; i++)
             {
-                if (populationFitnessScores[highestFitnessIndex] < populationFitnessScores[contestantGenomesIndexes[i]])
+                if (populationFitnessScores[highestFitnessIndex] < populationFitnessScores[_contestantGenomesIndexes[i]])
                 {
-                    highestFitnessIndex = contestantGenomesIndexes[i];
+                    highestFitnessIndex = _contestantGenomesIndexes[i];
                 }
             }
 
@@ -64,24 +82,24 @@ namespace ProblemSolvers.Solvers.Genetic.Selectors
             }
 
             var rng = new Random();
-            var contestantGenomesIndexes = new int[TournamentContestants];
+            //_contestantGenomesIndexes = new int[TournamentContestants];
 
             // randomly select indexes from the population
             for (int i = 0; i < TournamentContestants; i++)
             {
-                contestantGenomesIndexes[i] = rng.Next(0, populationEncoded.Length);
+                _contestantGenomesIndexes[i] = rng.Next(0, populationEncoded.Length);
             }
 
             // find highest fitness of selected possible parents
-            var lowestFitnessIndex = contestantGenomesIndexes[0];
+            var lowestFitnessIndex = _contestantGenomesIndexes[0];
             //Console.WriteLine($"Contestant {contestantGenomesIndexes[0]} fitness: {populationFitnessScores[lowestFitnessIndex]}");
 
             for (int i = 1; i < TournamentContestants; i++)
             {
                 //Console.WriteLine($"Contestant {contestantGenomesIndexes[i]} fitness: {populationFitnessScores[lowestFitnessIndex]}");
-                if (populationFitnessScores[lowestFitnessIndex] > populationFitnessScores[contestantGenomesIndexes[i]])
+                if (populationFitnessScores[lowestFitnessIndex] > populationFitnessScores[_contestantGenomesIndexes[i]])
                 {
-                    lowestFitnessIndex = contestantGenomesIndexes[i];
+                    lowestFitnessIndex = _contestantGenomesIndexes[i];
                 }
             }
 
