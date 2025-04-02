@@ -32,19 +32,22 @@ namespace ProblemSolvers.TestData.TestCases.Experiment4
             dataLoader = new CVRPvrpDataLoader();
             var cvrpEasyOne = dataLoader.LoadData(sourceFileEasyAn32k5);
             var cvrpHardOne = dataLoader.LoadData(sourceFileEasyAn60k9);
+            var maxFitnessCount = 1000;
 
             // setup algorithm generic data
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 1000, PopulationSize: 5000, CrossoverProbability: 1.1, MutationProbability: 1.05);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 1000, PopulationSize: 5000, CrossoverProbability: 1.1, MutationProbability: 1.05, maxFitnessCount);
             // the same amount of Generations as for each genome in genetic algorithm per generation
-            var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize);
-            var SAdataCVRP = new SimulatedAnnealingGenericData(50, 1.0, 0.0001, 0.9);
+            var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize, maxFitnessCount);
+            var SAdataCVRP = new SimulatedAnnealingGenericData(50, 1.0, 0.0001, 0.9, maxFitnessCount);
 
             // setup the solver
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
-            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10);
-            var runner2 = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn60k9, 10);
+            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, 
+                    SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10, false);
+            var runner2 = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, 
+                    SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn60k9, 10, false);
             runner.RunProblem();
             runner2.RunProblem();
 

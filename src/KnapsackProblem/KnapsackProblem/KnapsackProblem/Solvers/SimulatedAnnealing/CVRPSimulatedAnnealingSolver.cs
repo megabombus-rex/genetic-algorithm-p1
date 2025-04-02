@@ -12,13 +12,15 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
         private BestCVRPDataSimulatedAnnealing _bestCVRPData;
         private SimulatedAnnealingGenericData _algorithmData;
         private int _evaluationCount;
+        private bool _isUsingEvaluations = false;
 
-        public CVRPSimulatedAnnealingSolver(CVRProblem problem, SimulatedAnnealingGenericData data)
+        public CVRPSimulatedAnnealingSolver(CVRProblem problem, SimulatedAnnealingGenericData data, bool isUsingEvaluations)
         {
             _problem = problem;
             _bestCVRPData = new BestCVRPDataSimulatedAnnealing(problem.CitiesCount);
             _algorithmData = data;
             _evaluationCount = 0;
+            _isUsingEvaluations = isUsingEvaluations;
         }
 
         public BestCVRPData FindOptimalSolution()
@@ -66,42 +68,83 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
             var solutionFitness = _problem.CalculateFitness(solution);
             _evaluationCount++;
 
-            while (currentTemp > minTemp)
+            if (_isUsingEvaluations)
             {
-
-                for (int i = 0; i < _algorithmData.IterationsPerCoolingPeriod; i++)
+                while (currentTemp > minTemp)
                 {
-                    // find neighbour
-                    var neighbour = CreateNeighbour(solution, NeighbourCreationAlgorithm.SwapRandomElements);
-                    
-                    if (solutionChanged)
+                    for (int i = 0; i < _algorithmData.IterationsPerCoolingPeriod; i++)
                     {
-                        solutionFitness = _problem.CalculateFitness(solution);
+                        // find neighbour
+                        var neighbour = CreateNeighbour(solution, NeighbourCreationAlgorithm.SwapRandomElements);
+
+                        if (solutionChanged)
+                        {
+                            solutionFitness = _problem.CalculateFitness(solution);
+                            _evaluationCount++;
+                            solutionChanged = false;
+                        }
+                        var neighbourFitness = _problem.CalculateFitness(neighbour);
                         _evaluationCount++;
-                        solutionChanged = false;
-                    }
-                    var neighbourFitness = _problem.CalculateFitness(neighbour);
-                    _evaluationCount++;
 
-                    if (_bestCVRPData.Fitness > neighbourFitness)
-                    {
-                        _bestCVRPData.UpdateBestCVRPData(i, neighbourFitness, neighbour, currentTemp);
-                    }
+                        if (_bestCVRPData.Fitness > neighbourFitness)
+                        {
+                            _bestCVRPData.UpdateBestCVRPData(i, neighbourFitness, neighbour, currentTemp);
+                        }
 
-                    double probability = Math.Pow(Math.E, (solutionFitness - neighbourFitness) / currentTemp);
+                        double probability = Math.Pow(Math.E, (solutionFitness - neighbourFitness) / currentTemp);
 
-                    if (probability > rng.NextDouble())
-                    {
-                        Buffer.BlockCopy(neighbour, 0, solution, 0, solution.Length * sizeof(int));
-                        //Array.Copy(neighbour, solution, neighbour.Length);
-                        solutionChanged = true;
+                        if (probability > rng.NextDouble())
+                        {
+                            Buffer.BlockCopy(neighbour, 0, solution, 0, solution.Length * sizeof(int));
+                            //Array.Copy(neighbour, solution, neighbour.Length);
+                            solutionChanged = true;
+                        }
+                        countOfCalls++;
+                        if (_evaluationCount > _algorithmData.MaxFitnessComparisonCount)
+                        {
+                            break;
+                        }
                     }
-                    countOfCalls++;
+                    // decreasing by multiplication (Alpha < 1 && Alpha > 0)
+                    currentTemp *= _algorithmData.Alpha;
                 }
+            }
+            else
+            {
+                while (currentTemp > minTemp)
+                {
+                    for (int i = 0; i < _algorithmData.IterationsPerCoolingPeriod; i++)
+                    {
+                        // find neighbour
+                        var neighbour = CreateNeighbour(solution, NeighbourCreationAlgorithm.SwapRandomElements);
 
+                        if (solutionChanged)
+                        {
+                            solutionFitness = _problem.CalculateFitness(solution);
+                            _evaluationCount++;
+                            solutionChanged = false;
+                        }
+                        var neighbourFitness = _problem.CalculateFitness(neighbour);
+                        _evaluationCount++;
 
-                // decreasing by multiplication (Alpha < 1 && Alpha > 0)
-                currentTemp *= _algorithmData.Alpha;
+                        if (_bestCVRPData.Fitness > neighbourFitness)
+                        {
+                            _bestCVRPData.UpdateBestCVRPData(i, neighbourFitness, neighbour, currentTemp);
+                        }
+
+                        double probability = Math.Pow(Math.E, (solutionFitness - neighbourFitness) / currentTemp);
+
+                        if (probability > rng.NextDouble())
+                        {
+                            Buffer.BlockCopy(neighbour, 0, solution, 0, solution.Length * sizeof(int));
+                            //Array.Copy(neighbour, solution, neighbour.Length);
+                            solutionChanged = true;
+                        }
+                        countOfCalls++;
+                    }
+                    // decreasing by multiplication (Alpha < 1 && Alpha > 0)
+                    currentTemp *= _algorithmData.Alpha;
+                }
             }
 
             //_bestCVRPData.DisplayBestData("Simulated Annealing");

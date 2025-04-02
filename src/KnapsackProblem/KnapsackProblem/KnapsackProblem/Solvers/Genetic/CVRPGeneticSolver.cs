@@ -28,10 +28,11 @@ namespace ProblemSolvers.Solvers.Genetic
         private double _sumOfFitness;
 
         private int _currentIteration;
+        private bool _isUsingEvaluations = false;
         private BestCVRPData _bestCVRPData;
 
         public CVRPGeneticSolver(SelectionType selectionType, CombinatoralCrossoverer crossoverer, CombinatoralMutator mutator, 
-            GeneticAlgorithmGenericData data, CVRProblem problem)
+            GeneticAlgorithmGenericData data, CVRProblem problem, bool isUsingEvaluations)
         {
             _selectionType = selectionType;
             _crossoverer = crossoverer;
@@ -48,6 +49,7 @@ namespace ProblemSolvers.Solvers.Genetic
             _evaluationCount = 0;
             _currentIteration = 0;
             _bestCVRPData = new BestCVRPData(_problem.CitiesCount);
+            _isUsingEvaluations = isUsingEvaluations;
         }
 
 
@@ -71,62 +73,119 @@ namespace ProblemSolvers.Solvers.Genetic
 
             var rng = new Random();
 
-            while (_currentIteration < _algorithmData.GenerationsAmount)
+            if (_isUsingEvaluations)
             {
-                //Console.WriteLine($"Generation {_currentIteration}.");
-
-                // select parents
-                // index keeping the currently selected 'individual' from the next population
-                int nextPopulationIndex = 0;
-                while (nextPopulationIndex < _algorithmData.PopulationSize)
+                while (_currentIteration < _algorithmData.GenerationsAmount)
                 {
+                    //Console.WriteLine($"Generation {_currentIteration}.");
 
-                    // proportional Selection
-                    var parent1Index = SelectParentIndexForNextPopulation(_selectionType);
-                    var parent2Index = parent1Index;
-
-                    // crossover or basic replication
-                    if (rng.NextDouble() < _algorithmData.CrossoverProbability)
+                    // select parents
+                    // index keeping the currently selected 'individual' from the next population
+                    int nextPopulationIndex = 0;
+                    while (nextPopulationIndex < _algorithmData.PopulationSize)
                     {
-                        parent2Index = SelectParentIndexForNextPopulation(_selectionType);
 
-                        var crossoveredIndividual = _crossoverer.CrossoverParents(_populationEncoded[parent1Index], _populationEncoded[parent2Index]);
+                        // proportional Selection
+                        var parent1Index = SelectParentIndexForNextPopulation(_selectionType);
+                        var parent2Index = parent1Index;
 
-                        Array.Copy(crossoveredIndividual, _populationEncodedNextGen[nextPopulationIndex], crossoveredIndividual.Length);
-                        //Buffer.BlockCopy(crossoveredIndividual, 0, _populationEncodedNextGen[nextPopulationIndex], 0, crossoveredIndividual.Length * sizeof(int));
+                        // crossover or basic replication
+                        if (rng.NextDouble() < _algorithmData.CrossoverProbability)
+                        {
+                            parent2Index = SelectParentIndexForNextPopulation(_selectionType);
 
-                        //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
-                        //{
-                        //    _populationEncodedNextGen[nextPopulationIndex][j] = crossoveredIndividual[j];
-                        //}
+                            var crossoveredIndividual = _crossoverer.CrossoverParents(_populationEncoded[parent1Index], _populationEncoded[parent2Index]);
+
+                            Array.Copy(crossoveredIndividual, _populationEncodedNextGen[nextPopulationIndex], crossoveredIndividual.Length);
+                            //Buffer.BlockCopy(crossoveredIndividual, 0, _populationEncodedNextGen[nextPopulationIndex], 0, crossoveredIndividual.Length * sizeof(int));
+
+                            //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
+                            //{
+                            //    _populationEncodedNextGen[nextPopulationIndex][j] = crossoveredIndividual[j];
+                            //}
+                        }
+                        else
+                        {
+                            //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
+                            //{
+                            //    _populationEncodedNextGen[nextPopulationIndex][j] = _populationEncoded[parent1Index][j];
+                            //}
+                            Array.Copy(_populationEncoded[nextPopulationIndex], _populationEncodedNextGen[parent1Index], _populationEncoded[parent1Index].Length);
+
+                            //Buffer.BlockCopy(_populationEncoded[parent1Index], 0, _populationEncodedNextGen[nextPopulationIndex], 0, _populationEncodedNextGen[parent1Index].Length * sizeof(int));
+                        }
+
+                        // mutate
+                        if (rng.NextDouble() < _algorithmData.MutationProbability)
+                        {
+                            _mutator.MutateIndividual(_populationEncodedNextGen[nextPopulationIndex]);
+                        }
+
+                        nextPopulationIndex++;
                     }
-                    else
+
+                    // replace population
+                    ReplacePopulation();
+
+                    // evaluate new population
+                    _sumOfFitness = 0;
+                    EvaluatePopulation();
+                    _currentIteration++;
+
+                    if (_evaluationCount + (_algorithmData.GenerationsAmount * _algorithmData.PopulationSize) < _algorithmData.MaxFitnessComparisonCount)
                     {
-                        //for (int j = 0; j < _populationEncodedNextGen[nextPopulationIndex].Length; j++)
-                        //{
-                        //    _populationEncodedNextGen[nextPopulationIndex][j] = _populationEncoded[parent1Index][j];
-                        //}
-                        Array.Copy(_populationEncoded[nextPopulationIndex], _populationEncodedNextGen[parent1Index], _populationEncoded[parent1Index].Length);
-
-                        //Buffer.BlockCopy(_populationEncoded[parent1Index], 0, _populationEncodedNextGen[nextPopulationIndex], 0, _populationEncodedNextGen[parent1Index].Length * sizeof(int));
+                        break;
                     }
-
-                    // mutate
-                    if (rng.NextDouble() < _algorithmData.MutationProbability)
-                    {
-                        _mutator.MutateIndividual(_populationEncodedNextGen[nextPopulationIndex]);
-                    }
-
-                    nextPopulationIndex++;
                 }
-                
-                // replace population
-                ReplacePopulation();
+            }
+            else
+            {
+                while (_currentIteration < _algorithmData.GenerationsAmount)
+                {
+                    // select parents index keeping the currently selected 'individual' from the next population
+                    int nextPopulationIndex = 0;
+                    while (nextPopulationIndex < _algorithmData.PopulationSize)
+                    {
+                        // proportional Selection
+                        var parent1Index = SelectParentIndexForNextPopulation(_selectionType);
+                        var parent2Index = parent1Index;
 
-                // evaluate new population
-                _sumOfFitness = 0;
-                EvaluatePopulation();
-                _currentIteration++;
+                        // crossover or basic replication
+                        if (rng.NextDouble() < _algorithmData.CrossoverProbability)
+                        {
+                            parent2Index = SelectParentIndexForNextPopulation(_selectionType);
+
+                            var crossoveredIndividual = _crossoverer.CrossoverParents(_populationEncoded[parent1Index], _populationEncoded[parent2Index]);
+
+                            Array.Copy(crossoveredIndividual, _populationEncodedNextGen[nextPopulationIndex], crossoveredIndividual.Length);
+                        }
+                        else
+                        {
+                            Array.Copy(_populationEncoded[nextPopulationIndex], _populationEncodedNextGen[parent1Index], _populationEncoded[parent1Index].Length);
+                        }
+
+                        // mutate
+                        if (rng.NextDouble() < _algorithmData.MutationProbability)
+                        {
+                            _mutator.MutateIndividual(_populationEncodedNextGen[nextPopulationIndex]);
+                        }
+
+                        nextPopulationIndex++;
+                    }
+
+                    // replace population
+                    ReplacePopulation();
+
+                    // evaluate new population
+                    _sumOfFitness = 0;
+                    EvaluatePopulation();
+                    _currentIteration++;
+
+                    if (_evaluationCount + (_algorithmData.GenerationsAmount * _algorithmData.PopulationSize) < _algorithmData.MaxFitnessComparisonCount)
+                    {
+                        break;
+                    }
+                }
             }
 
             Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");

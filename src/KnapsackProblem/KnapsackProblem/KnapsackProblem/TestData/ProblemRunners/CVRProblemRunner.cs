@@ -33,14 +33,14 @@ namespace ProblemSolvers.TestData.ProblemRunners
         public CVRProblemRunner(CVRProblem problem, 
             GeneticAlgorithmGenericData GAData, RandomSearchGenericData RSData, SimulatedAnnealingGenericData SAData,
             SelectionType selectionType, CombinatoralCrossoverer crossoverer, CombinatoralMutator mutator, int tournamentContestantsAmount, 
-            string problemTestCasePath, int iterationCount)
+            string problemTestCasePath, int iterationCount, bool isUsingEvaluations)
         {
             _problem = problem;
 
-            _geneticSolver = new CVRPGeneticSolver(selectionType, crossoverer, mutator, GAData, problem);
+            _geneticSolver = new CVRPGeneticSolver(selectionType, crossoverer, mutator, GAData, problem, isUsingEvaluations);
             _greedySolver = new CVRPGreedySolver(problem);
-            _randomSearchSolver = new CVRPRandomSearchSolver(problem, RSData);
-            _annealingSolver = new CVRPSimulatedAnnealingSolver(problem, SAData);
+            _randomSearchSolver = new CVRPRandomSearchSolver(problem, RSData, isUsingEvaluations);
+            _annealingSolver = new CVRPSimulatedAnnealingSolver(problem, SAData, isUsingEvaluations);
 
             _GAData = GAData;
             _RSData = RSData;

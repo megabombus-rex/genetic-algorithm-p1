@@ -3,6 +3,7 @@ using ProblemSolvers.TestData.TestCases.Experiment2;
 using ProblemSolvers.TestData.TestCases.Experiment3;
 using ProblemSolvers.TestData.TestCases.Experiment4;
 using ProblemSolvers.TestData.TestCases.Experiment5;
+using ProblemSolvers.TestData.TestCases.Experiment6;
 
 public class Program
 {
@@ -13,7 +14,9 @@ public class Program
         //var experiment = new Experiment_1_2();
         //var experiment = new Experiment_2();
         //var experiment = new Experiment_3();
-        var experiment = new Experiment_4();
+        //var experiment = new Experiment_4();
+        //var experiment = new Experiment_5();
+        var experiment = new Experiment_6();
 
         experiment.RunExperiment();
     }

@@ -11,13 +11,15 @@ namespace ProblemSolvers.Solvers.RandomSearch
         private BestCVRPData _bestCVRPData;
         private RandomSearchGenericData _algorithmData;
         private int _evaluationCount;
+        private bool _isUsingEvaluations = false;
 
-        public CVRPRandomSearchSolver(CVRProblem problem, RandomSearchGenericData data)
+        public CVRPRandomSearchSolver(CVRProblem problem, RandomSearchGenericData data, bool isUsingEvaluations)
         {
             _problem = problem;
             _bestCVRPData = new BestCVRPData(problem.CitiesCount);
             _algorithmData = data;
             _evaluationCount = 0;
+            _isUsingEvaluations = isUsingEvaluations;
         }
 
         public BestCVRPData FindOptimalSolution()
@@ -40,19 +42,37 @@ namespace ProblemSolvers.Solvers.RandomSearch
 
             var rng = new Random();
 
-            for (int generation = 0; generation < _algorithmData.GenerationsAmount; generation++)
-            {
-                rng.Shuffle(genome);
-                var fitness = _problem.CalculateFitness(genome);
-                _evaluationCount++;
 
-                if (fitness < _bestCVRPData.Fitness)
+            if (_isUsingEvaluations)
+            {
+                for (int generation = 0; generation < _algorithmData.MaxFitnessComparisonCount; generation++)
                 {
-                    _bestCVRPData.UpdateBestCVRPData(generation, fitness, genome);
+                    rng.Shuffle(genome);
+                    var fitness = _problem.CalculateFitness(genome);
+                    _evaluationCount++;
+
+                    if (fitness < _bestCVRPData.Fitness)
+                    {
+                        _bestCVRPData.UpdateBestCVRPData(generation, fitness, genome);
+                    }
+                }
+            }
+            else
+            {
+                for (int generation = 0; generation < _algorithmData.GenerationsAmount; generation++)
+                {
+                    rng.Shuffle(genome);
+                    var fitness = _problem.CalculateFitness(genome);
+                    _evaluationCount++;
+
+                    if (fitness < _bestCVRPData.Fitness)
+                    {
+                        _bestCVRPData.UpdateBestCVRPData(generation, fitness, genome);
+                    }
                 }
             }
 
-            Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");
+            //Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");
             //_bestCVRPData.DisplayBestData("Random Search");
             return _bestCVRPData.Clone();
         }
