@@ -37,7 +37,7 @@ namespace ProblemSolvers.TestData.TestCases.Experiment5
             var maxFitnessCount = 1000;
 
             // setup algorithm generic data
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 100, PopulationSize: 100, CrossoverProbability: 0.7, MutationProbability: 0.1, maxFitnessCount);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 500, PopulationSize: 5000, CrossoverProbability: 0.8, MutationProbability: 0.05, maxFitnessCount);
             // the same amount of Generations as for each genome in genetic algorithm per generation
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize, maxFitnessCount);
             var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.9, maxFitnessCount);
@@ -50,7 +50,7 @@ namespace ProblemSolvers.TestData.TestCases.Experiment5
                     SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10, false);
             var runnerTwo = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, 
                     SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileHardAn60k9, 10, false);
-            runner.RunProblem();
+            //runner.RunProblem();
             runnerTwo.RunProblem();
         }
     }

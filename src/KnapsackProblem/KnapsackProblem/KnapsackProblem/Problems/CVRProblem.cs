@@ -73,6 +73,8 @@ namespace ProblemSolvers.Problems
             // _problem cities
             // |1|2|3|4|5|6|
 
+            var routes = new List<List<int>>();
+
             var distanceRan = 0.0;
             var currentCapacity = _truckCapacity;
 
@@ -81,7 +83,7 @@ namespace ProblemSolvers.Problems
             var currentCity = _problemCities[citiesVisited[0] - 1];
             distanceRan += currentCity.DistanceToDepot;
             currentCapacity -= currentCity.ProduceDemand;
-
+            //var currentRoute = new List<int>();
 
             // first city (i = 0) is for sure from depot
             for (int i = 1; i < citiesVisited.Length; i++)
@@ -91,17 +93,20 @@ namespace ProblemSolvers.Problems
                 currentCity = _problemCities[citiesVisited[i] - 1];
                 if (currentCapacity >= currentCity.ProduceDemand)
                 {
+                    Console.WriteLine($"Current capacity: {currentCapacity}.\nCurrent demand: {currentCity.ProduceDemand}.\nGoing to city {currentCity.Number} for {previousCity.DistancesToOtherCities[currentCity.Number]} distance.");
                     currentCapacity -= currentCity.ProduceDemand;
-                    distanceRan += previousCity.DistancesToOtherCities[currentCity.Number];
+                    distanceRan += Math.Round(previousCity.DistancesToOtherCities[currentCity.Number]);
                     //Console.WriteLine($"Distance ran {distanceRan}.");
                     continue;
                 }
                 //Console.WriteLine($"Capacity reached, {currentCity.ProduceDemand}, currently: {currentCapacity}.");
 
                 // come back from the previous city
-                distanceRan += previousCity.DistanceToDepot;
+                Console.WriteLine($"Coming back to the depot for {previousCity.DistanceToDepot} distance.");
+                distanceRan += Math.Round(previousCity.DistanceToDepot);
 
                 // go to the next city from the depot
+                Console.WriteLine($"Going to city {currentCity.Number} for {currentCity.DistanceToDepot} distance.\nCurrent demand: {currentCity.ProduceDemand}.");
                 distanceRan += currentCity.DistanceToDepot;
                 //Console.WriteLine($"Distance ran {distanceRan}.");
                 currentCapacity = _truckCapacity - currentCity.ProduceDemand;
@@ -116,18 +121,19 @@ namespace ProblemSolvers.Problems
             public int ProduceDemand;
             public float DistanceToDepot;
             public Vector2 Position;
+            // depot is not const, its the first city, maybe decrease every city's number so it won't affect everything
             private readonly Vector2 _depotConstPosition;
 
             // maybe round down to int
             public Dictionary<int, float> DistancesToOtherCities;
 
             [JsonConstructor]
-            public City(int number, Vector2 position, int produceDemand)
+            public City(int number, Vector2 position, int produceDemand, Vector2 depotPosition)
             {
                 Number = number;
                 ProduceDemand = produceDemand;
                 Position = position;
-                _depotConstPosition = new Vector2(0.0f, 0.0f);
+                _depotConstPosition = depotPosition;
 
                 DistanceToDepot = Vector2.Distance(Position, _depotConstPosition);
                 DistancesToOtherCities = new Dictionary<int, float>();
