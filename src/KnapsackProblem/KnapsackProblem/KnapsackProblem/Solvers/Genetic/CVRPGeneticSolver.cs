@@ -180,11 +180,6 @@ namespace ProblemSolvers.Solvers.Genetic
                     _sumOfFitness = 0;
                     EvaluatePopulation();
                     _currentIteration++;
-
-                    if (_evaluationCount + (_algorithmData.GenerationsAmount * _algorithmData.PopulationSize) < _algorithmData.MaxFitnessComparisonCount)
-                    {
-                        break;
-                    }
                 }
             }
 

@@ -3,11 +3,12 @@ using ProblemSolvers.Problems;
 
 namespace ProblemSolvers.DataLoaders.CVRP
 {
+    [Obsolete]
     public class CVRPJsonDataLoader : IDataLoader<CVRProblem>
     {
         public CVRPJsonDataLoader()
         {
-
+            throw new NotImplementedException("Json data format is not used anymore.");
         }
 
 

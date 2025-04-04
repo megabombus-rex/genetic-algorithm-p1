@@ -27,7 +27,10 @@ namespace ProblemSolvers.DataLoaders.CVRP
             
             using (StreamReader sr = new StreamReader(filePath))
             {
+                CVRProblem.City depotCity = new CVRProblem.City(0, new Vector2(0, 0), 0, new Vector2(0, 0));
                 bool capacityRead = false;
+                bool depotCoordinatesRead = false;
+                bool depotRead = false;
                 bool nodeCoordinatesRead = false;
                 bool citiesDemandRead = false;
                 while (!sr.EndOfStream)
@@ -45,6 +48,7 @@ namespace ProblemSolvers.DataLoaders.CVRP
                         continue;
                     }
 
+
                     if (!nodeCoordinatesRead)
                     {
                         if (line.StartsWith("DEMAND"))
@@ -57,13 +61,27 @@ namespace ProblemSolvers.DataLoaders.CVRP
                             continue;
                         }
 
+                        if (!depotCoordinatesRead)
+                        {
+                            if (line.StartsWith(" 1"))
+                            {
+                                var splitLine = line.Split();
+                                var depotX = float.Parse(splitLine[2]);
+                                var depotY = float.Parse(splitLine[3]);
+                                depotCity = new CVRProblem.City(0, new Vector2(depotX, depotY), 0, new Vector2(depotX, depotY));
+                                depotCoordinatesRead = true;
+                                continue;
+                            }
+                        }
+
                         var split = line.Split();
 
-                        var cityNr = int.Parse(split[1]);
+                        var cityNr = int.Parse(split[1]) - 1; // depot = 0 in this configuration
                         var cityX = float.Parse(split[2]);
                         var cityY = float.Parse(split[3]);
 
-                        var city = new CVRProblem.City(cityNr, new Vector2(cityX, cityY), 0);
+                        // depot should be known now
+                        var city = new CVRProblem.City(cityNr, new Vector2(cityX, cityY), 0, depotCity.Position);
 
                         citiesDict.Add(cityNr, city);
                         continue;
@@ -77,9 +95,17 @@ namespace ProblemSolvers.DataLoaders.CVRP
                             citiesDemandRead = true;
                             continue;
                         }
+                        if (!depotRead)
+                        {
+                            if (line.StartsWith("1"))
+                            {
+                                depotRead = true;
+                                continue;
+                            }
+                        }
                         var split = line.Split();
 
-                        var cityNr = int.Parse(split[0]);
+                        var cityNr = int.Parse(split[0]) - 1;
                         var cityDemand = int.Parse(split[1]);
 
                         citiesDict[cityNr].ProduceDemand = cityDemand;
