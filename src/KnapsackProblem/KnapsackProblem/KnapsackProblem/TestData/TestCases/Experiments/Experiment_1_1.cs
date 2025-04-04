@@ -8,7 +8,7 @@ using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 using ProblemSolvers.TestData.ProblemRunners;
 
-namespace ProblemSolvers.TestData.TestCases.Experiment1
+namespace ProblemSolvers.TestData.TestCases.Experiments
 {
     public class Experiment_1_1 : IExperiment
     {

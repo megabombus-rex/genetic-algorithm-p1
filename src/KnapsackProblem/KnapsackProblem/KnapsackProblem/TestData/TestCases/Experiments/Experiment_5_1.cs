@@ -8,7 +8,7 @@ using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 using ProblemSolvers.TestData.ProblemRunners;
 
-namespace ProblemSolvers.TestData.TestCases.Experiment5
+namespace ProblemSolvers.TestData.TestCases.Experiments
 {
     // tournament contestants = 1
     public class Experiment_5_1 : IExperiment
@@ -46,9 +46,9 @@ namespace ProblemSolvers.TestData.TestCases.Experiment5
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
-            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, 
+            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP,
                     SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10, false);
-            var runnerTwo = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, 
+            var runnerTwo = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP,
                     SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileHardAn60k9, 10, false);
             //runner.RunProblem();
             runnerTwo.RunProblem();

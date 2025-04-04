@@ -8,14 +8,14 @@ using ProblemSolvers.Solvers.Genetic.Mutators.CombinatoralMutators;
 using ProblemSolvers.Solvers.Genetic.Selectors;
 using ProblemSolvers.TestData.ProblemRunners;
 
-namespace ProblemSolvers.TestData.TestCases.Experiment1
+namespace ProblemSolvers.TestData.TestCases.Experiments
 {
     // the best results
     public class Experiment_1_2 : IExperiment
     {
         public void RunExperiment()
         {
-            var expStart = DateTime.UtcNow; 
+            var expStart = DateTime.UtcNow;
 
             // The program is as follows:
             // create a problem with methods for Evaluation and for encoded data translation to problem's data
