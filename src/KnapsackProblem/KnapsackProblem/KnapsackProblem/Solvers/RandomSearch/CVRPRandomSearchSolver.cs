@@ -31,6 +31,7 @@ namespace ProblemSolvers.Solvers.RandomSearch
                 Console.WriteLine("Empty city list, fitness = 0.");
                 return _bestCVRPData;
             }
+            _evaluationCount = 0;
 
             // create an initial genome
             int[] genome = new int[_problem.CitiesCount];

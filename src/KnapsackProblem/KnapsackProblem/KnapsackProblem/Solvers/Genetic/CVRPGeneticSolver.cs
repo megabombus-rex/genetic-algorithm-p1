@@ -62,6 +62,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 Console.WriteLine("Empty city list, fitness = 0.");
                 return _bestCVRPData;
             }
+            _evaluationCount = 0;
 
             // Create population
             CreateInitialPopulation();
