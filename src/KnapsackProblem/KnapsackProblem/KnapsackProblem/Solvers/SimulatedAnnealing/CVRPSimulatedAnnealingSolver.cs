@@ -158,6 +158,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                     }
                     // decreasing by multiplication (Alpha < 1 && Alpha > 0)
                     currentTemp = _temperatureChangeStrategy.Invoke(currentTemp);
+                    //Console.WriteLine($"Current temperature: {currentTemp}.");
                 }
             }
 
