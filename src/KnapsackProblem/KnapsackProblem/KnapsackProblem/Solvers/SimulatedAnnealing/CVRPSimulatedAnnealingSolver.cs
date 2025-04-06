@@ -8,19 +8,32 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
     // https://www.geeksforgeeks.org/simulated-annealing/
     public class CVRPSimulatedAnnealingSolver : ISolver<BestCVRPData>
     {
+        private delegate double ChangeTemperature(double currentTemperature);
+
         private CVRProblem _problem;
         private BestCVRPDataSimulatedAnnealing _bestCVRPData;
         private SimulatedAnnealingGenericData _algorithmData;
         private int _evaluationCount;
         private bool _isUsingEvaluations = false;
+        private ChangeTemperature _temperatureChangeStrategy;
+        private int _countOfCalls;
 
-        public CVRPSimulatedAnnealingSolver(CVRProblem problem, SimulatedAnnealingGenericData data, bool isUsingEvaluations)
+        public CVRPSimulatedAnnealingSolver(CVRProblem problem, SimulatedAnnealingGenericData data, bool isUsingEvaluations, TemperatureChangeType temperatureChangeType)
         {
             _problem = problem;
             _bestCVRPData = new BestCVRPDataSimulatedAnnealing(problem.CitiesCount);
             _algorithmData = data;
             _evaluationCount = 0;
+            _countOfCalls = 0;
             _isUsingEvaluations = isUsingEvaluations;
+
+            _temperatureChangeStrategy = (temperatureChangeType) switch
+            {
+                TemperatureChangeType.Linear => LinearTemperatureChange,
+                TemperatureChangeType.Exponential => ExponentialTemperatureChange,
+                TemperatureChangeType.Logarithmic => LogarithmicTemperatureChange,
+                _ => throw new NotImplementedException()
+            };
         }
 
         public BestCVRPData FindOptimalSolution()
@@ -32,6 +45,8 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                 Console.WriteLine("Empty city list, fitness = Max Value.");
                 return _bestCVRPData;
             }
+            _evaluationCount = 0;
+            _countOfCalls = 0;
 
             // energy goal function
             // neighbour generator
@@ -45,7 +60,6 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
 
             // implement base solution s
             var solution = new int[_problem.CitiesCount];
-            var countOfCalls = 0;
 
             var rng = new Random();
             for (int i = 0; i < solution.Length; i++)
@@ -99,7 +113,7 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                             //Array.Copy(neighbour, solution, neighbour.Length);
                             solutionChanged = true;
                         }
-                        countOfCalls++;
+                        _countOfCalls++;
                         if (_evaluationCount > _algorithmData.MaxFitnessComparisonCount)
                         {
                             break;
@@ -140,15 +154,15 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
                             //Array.Copy(neighbour, solution, neighbour.Length);
                             solutionChanged = true;
                         }
-                        countOfCalls++;
+                        _countOfCalls++;
                     }
                     // decreasing by multiplication (Alpha < 1 && Alpha > 0)
-                    currentTemp *= _algorithmData.Alpha;
+                    currentTemp = _temperatureChangeStrategy.Invoke(currentTemp);
                 }
             }
 
             //_bestCVRPData.DisplayBestData("Simulated Annealing");
-            Console.WriteLine($"SA iterations sum through temperature changes {countOfCalls}");
+            Console.WriteLine($"SA iterations sum through temperature changes {_countOfCalls}");
             Console.WriteLine($"Fitness evaluated {_evaluationCount} times.");
             return _bestCVRPData.Clone();
         }
@@ -208,10 +222,32 @@ namespace ProblemSolvers.Solvers.SimulatedAnnealing
             return neighbour;
         }
 
+        private double LinearTemperatureChange(double currentTemp)
+        {
+            return currentTemp - (_algorithmData.Alpha * _algorithmData.InitialTemperature);
+        }
+
+        private double ExponentialTemperatureChange(double currentTemp)
+        {
+            return currentTemp * _algorithmData.Alpha;
+        }
+
+        private double LogarithmicTemperatureChange(double currentTemp)
+        {
+            return _algorithmData.InitialTemperature / Math.Log(_countOfCalls + 1);
+        }
+
         private enum NeighbourCreationAlgorithm
         {
             MoveAllPointsLeftOrRight,
             SwapRandomElements
+        }
+
+        public enum TemperatureChangeType
+        {
+            Linear,
+            Exponential,
+            Logarithmic
         }
     }
 }
