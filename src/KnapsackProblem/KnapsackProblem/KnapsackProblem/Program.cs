@@ -2,12 +2,7 @@
 using ProblemSolvers.DataLoaders.CVRP;
 using ProblemSolvers.Problems;
 using ProblemSolvers.Solvers.Genetic.Selectors;
-using ProblemSolvers.TestData.TestCases.Experiment1;
-using ProblemSolvers.TestData.TestCases.Experiment2;
-using ProblemSolvers.TestData.TestCases.Experiment3;
-using ProblemSolvers.TestData.TestCases.Experiment4;
-using ProblemSolvers.TestData.TestCases.Experiment5;
-using ProblemSolvers.TestData.TestCases.Experiment6;
+using ProblemSolvers.TestData.TestCases.Experiments;
 
 public class Program
 {
