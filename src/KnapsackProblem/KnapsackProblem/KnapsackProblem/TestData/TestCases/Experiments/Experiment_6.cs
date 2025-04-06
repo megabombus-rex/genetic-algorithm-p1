@@ -33,16 +33,17 @@ namespace ProblemSolvers.TestData.TestCases.Experiments
             var maxFitnessCount = 1000000;
 
             // setup algorithm generic data
-            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 100, PopulationSize: 100, CrossoverProbability: 0.9, MutationProbability: 0.05, maxFitnessCount);
+            var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 100, PopulationSize: 2000, CrossoverProbability: 0.99, MutationProbability: 0.05, maxFitnessCount);
             // the same amount of Generations as for each genome in genetic algorithm per generation
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize, maxFitnessCount);
-            var SAdataCVRP = new SimulatedAnnealingGenericData(1000, 1.0, 0.0001, 0.9, maxFitnessCount);
+            var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.9, maxFitnessCount);
 
             // setup the solver
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
-            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10, false);
+            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, 
+                Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Linear, crossovererCVRP, mutatorCVRP, 10, sourceFileEasyAn32k5, 10, false);
             runner.RunProblem();
         }
     }

@@ -52,13 +52,13 @@ namespace ProblemSolvers.TestData.TestCases.Experiments
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
-            var runnerI1 = new CVRProblemRunner(cvrpI1, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI1, 10, false);
-            var runnerI2 = new CVRProblemRunner(cvrpI2, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI2, 10, false);
-            var runnerI3 = new CVRProblemRunner(cvrpI3, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI3, 10, false);
-            var runnerI4 = new CVRProblemRunner(cvrpI4, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI4, 10, false);
-            var runnerI5 = new CVRProblemRunner(cvrpI5, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI5, 10, false);
-            var runnerI6 = new CVRProblemRunner(cvrpI6, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI6, 10, false);
-            var runnerI7 = new CVRProblemRunner(cvrpI7, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileI7, 10, false);
+            var runnerI1 = new CVRProblemRunner(cvrpI1, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament,Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential,crossovererCVRP, mutatorCVRP, 5, sourceFileI1, 10, false);
+            var runnerI2 = new CVRProblemRunner(cvrpI2, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament,Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential,crossovererCVRP, mutatorCVRP, 5, sourceFileI2, 10, false);
+            var runnerI3 = new CVRProblemRunner(cvrpI3, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament,Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential,crossovererCVRP, mutatorCVRP, 5, sourceFileI3, 10, false);
+            var runnerI4 = new CVRProblemRunner(cvrpI4, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament,Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential,crossovererCVRP, mutatorCVRP, 5, sourceFileI4, 10, false);
+            var runnerI5 = new CVRProblemRunner(cvrpI5, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament,Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential,crossovererCVRP, mutatorCVRP, 5, sourceFileI5, 10, false);
+            var runnerI6 = new CVRProblemRunner(cvrpI6, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament,Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential,crossovererCVRP, mutatorCVRP, 5, sourceFileI6, 10, false);
+            var runnerI7 = new CVRProblemRunner(cvrpI7, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential, crossovererCVRP, mutatorCVRP, 5, sourceFileI7, 10, false);
             runnerI1.RunProblem();
             runnerI2.RunProblem();
             runnerI3.RunProblem();

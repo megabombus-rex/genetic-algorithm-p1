@@ -47,9 +47,9 @@ namespace ProblemSolvers.TestData.TestCases.Experiments
             var mutatorCVRP = new InvertedCombinationMutator();
 
             var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP,
-                    SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10, false);
+                    SelectionType.Tournament, Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential, crossovererCVRP, mutatorCVRP, 5, sourceFileEasyAn32k5, 10, false);
             var runnerTwo = new CVRProblemRunner(cvrpHardOne, GAdataCVRP, RSdataCVRP, SAdataCVRP,
-                    SelectionType.Tournament, crossovererCVRP, mutatorCVRP, 5, sourceFileHardAn60k9, 10, false);
+                    SelectionType.Tournament, Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Exponential, crossovererCVRP, mutatorCVRP, 5, sourceFileHardAn60k9, 10, false);
             //runner.RunProblem();
             runnerTwo.RunProblem();
         }
