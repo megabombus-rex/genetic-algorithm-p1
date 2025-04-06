@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Misc\" />
     <Folder Include="TestData\VRP\Easy\" />
     <Folder Include="TestData\VRP\Easy\A-n32-k5_results\" />
     <Folder Include="TestData\VRP\Hard\" />
