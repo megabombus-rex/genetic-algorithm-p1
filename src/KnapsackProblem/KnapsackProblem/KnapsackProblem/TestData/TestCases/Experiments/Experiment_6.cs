@@ -30,20 +30,20 @@ namespace ProblemSolvers.TestData.TestCases.Experiments
             var sourceFileEasyAn32k5 = testDataPath + "\\VRP\\Easy\\A-n32-k5.vrp";
             dataLoader = new CVRPvrpDataLoader();
             var cvrpEasyOne = dataLoader.LoadData(sourceFileEasyAn32k5);
-            var maxFitnessCount = 1000000;
+            var maxFitnessCount = 100000000;
 
             // setup algorithm generic data
             var GAdataCVRP = new GeneticAlgorithmGenericData(GenerationsAmount: 100, PopulationSize: 2000, CrossoverProbability: 0.99, MutationProbability: 0.05, maxFitnessCount);
             // the same amount of Generations as for each genome in genetic algorithm per generation
             var RSdataCVRP = new RandomSearchGenericData(GenerationsAmount: GAdataCVRP.GenerationsAmount * GAdataCVRP.PopulationSize, maxFitnessCount);
-            var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.9, maxFitnessCount);
+            var SAdataCVRP = new SimulatedAnnealingGenericData(100, 1.0, 0.0001, 0.99, maxFitnessCount);
 
             // setup the solver
             var crossovererCVRP = new OrderedCrossoverer();
             var mutatorCVRP = new InvertedCombinationMutator();
 
-            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Tournament, 
-                Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Linear, crossovererCVRP, mutatorCVRP, 10, sourceFileEasyAn32k5, 10, false);
+            var runner = new CVRProblemRunner(cvrpEasyOne, GAdataCVRP, RSdataCVRP, SAdataCVRP, SelectionType.Roulette, 
+                Solvers.SimulatedAnnealing.CVRPSimulatedAnnealingSolver.TemperatureChangeType.Linear, crossovererCVRP, mutatorCVRP, 10, sourceFileEasyAn32k5, 100, false);
             runner.RunProblem();
         }
     }

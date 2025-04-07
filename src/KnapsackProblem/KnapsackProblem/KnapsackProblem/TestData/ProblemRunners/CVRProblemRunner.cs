@@ -56,19 +56,19 @@ namespace ProblemSolvers.TestData.ProblemRunners
 
         public void RunProblem()
         {
-            //var runTimeGreed = DateTime.UtcNow;
-            //var resultCVRPGreed = _greedySolver.FindOptimalSolution();
-            //var timespanGreed = DateTime.UtcNow - runTimeGreed;
+            var runTimeGreed = DateTime.UtcNow;
+            var resultCVRPGreed = _greedySolver.FindOptimalSolution();
+            var timespanGreed = DateTime.UtcNow - runTimeGreed;
 
-            //var resGA = RunProblemGA();
-            //var resRSA = RunProblemRSA();
+            var resGA = RunProblemGA();
+            var resRSA = RunProblemRSA();
             var resSA = RunProblemSA();
 
             // results writing
-            //var genResults = ShowResults(resGA.mean, resGA.best, resGA.worst, resGA.stdDev, resGA.iterationCount, "Genetic Algorithm", resGA.runtimeMean, resGA.bestIndividual);
-            //var ranResults = ShowResults(resRSA.mean, resRSA.best, resRSA.worst, resRSA.stdDev, resRSA.iterationCount, "Random Search Algorithm", resRSA.runtimeMean, resRSA.bestIndividual);
+            var genResults = ShowResults(resGA.mean, resGA.best, resGA.worst, resGA.stdDev, resGA.iterationCount, "Genetic Algorithm", resGA.runtimeMean, resGA.bestIndividual);
+            var ranResults = ShowResults(resRSA.mean, resRSA.best, resRSA.worst, resRSA.stdDev, resRSA.iterationCount, "Random Search Algorithm", resRSA.runtimeMean, resRSA.bestIndividual);
             var SAResults = ShowResults(resSA.mean, resSA.best, resSA.worst, resSA.stdDev, resSA.iterationCount, "Simulated Annealing Algorithm", resSA.runtimeMean, resSA.bestIndividual);
-            //var greedResults = ShowResults(resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, 0.0, 1, "Greedy Algorithm", timespanGreed, resultCVRPGreed.Genome);
+            var greedResults = ShowResults(resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, resultCVRPGreed.Fitness, 0.0, 1, "Greedy Algorithm", timespanGreed, resultCVRPGreed.Genome);
 
             var now = DateTime.UtcNow;
             var date = (now.ToShortDateString() + now.ToShortTimeString()).Replace(':', '_').Replace(' ', '_');
@@ -80,9 +80,9 @@ namespace ProblemSolvers.TestData.ProblemRunners
             var ranData = $"Random Search algorithm data: Population size: {_RSData.GenerationsAmount}.";
             var saData = $"Simulated Annealing algorithm data: Initial temperature: {_SAData.InitialTemperature}. Minimal temperature: {_SAData.MinimalTemperature}. Iterations per T change: {_SAData.IterationsPerCoolingPeriod}. Alpha: {_SAData.Alpha}.";
 
-            //var data = new List<string>() { gaData, ranData, saData, genResults, ranResults, SAResults, greedResults };
+            var data = new List<string>() { gaData, ranData, saData, genResults, ranResults, SAResults, greedResults };
             //var data = new List<string>() { gaData, ranData, saData, genResults };
-            var data = new List<string>() { saData, SAResults };
+            //var data = new List<string>() { saData, SAResults };
 
             SaveFile(filename, data, fileWithoutExt);
         }
