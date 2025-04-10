@@ -133,7 +133,7 @@ namespace ProblemSolvers.Solvers.Genetic
                     EvaluatePopulation();
                     _currentIteration++;
 
-                    if (_evaluationCount + (_algorithmData.GenerationsAmount * _algorithmData.PopulationSize) < _algorithmData.MaxFitnessComparisonCount)
+                    if (_evaluationCount + _algorithmData.PopulationSize > _algorithmData.MaxFitnessComparisonCount)
                     {
                         break;
                     }
@@ -234,7 +234,7 @@ namespace ProblemSolvers.Solvers.Genetic
                 _sumOfFitness += calculatedFitness;
             }
 
-            Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
+            //Console.WriteLine($"Best fitness in generation {_currentIteration} is {bestFitnessPerPopulation}.");
         }
 
         private int SelectParentIndexForNextPopulation(SelectionType selectionType)
